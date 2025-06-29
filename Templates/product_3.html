@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-xs text-gray-500 flex items-left gap-2 bg-gray-100 py-4 mb-2 md:px-8 px-4">
+  <a href="/" class="hover:text-pink-500">Home</a>
+  <span>&gt;</span>
+  <a href="/new-arrival" class="hover:text-pink-500">New Arrival</a>
+  <span>&gt;</span>
+  <span class="font-medium text-black">{{ product.name }}</span>
+</div>
+
+<div class="px-4 md:px-8">
+<div class="flex flex-col md:flex-row items-start gap-8 md:px-8 px-4">
+
+  <!-- Product Image -->
+  <div class="w-full md:w-1/2 relative">
+  <!-- Discount Ribbon -->
+  <div class="absolute top-2 right-2 bg-pink-500 text-white text-xs font-semibold px-3 py-1 border radius 50 border-transparent z-10 shadow">
+    {{ ((product.before_price - product.price) / product.before_price * 100) | round(0) | int }}% OFF
+  </div>
+    <img src="{{ url_for('static', filename='images/UvBan.jpg') }}" alt="UV Ban Sunblock" class="rounded-lg shadow w-full object-cover">
+  </div>
+
+  <!-- Product Info -->
+  <div class="w-full md:w-1/2 flex flex-col">
+
+  <h2 class="text-2xl font-semibold text-left mb-3">UV Ban Sunblock</h2>
+
+  <!-- Ratings -->
+  <div class="flex items-center gap-1 text-black-400 text-xl mb-3">
+    ★★★★★ <span class="text-gray-700 text-base text-2xl">(5) 37 reviews</span>
+  </div>
+
+  <div class="flex items-center gap-3 mb-4">
+  <span class="text-black-500 line-through text-2xl">Rs. {{ product.before_price }}</span>
+  <span class="text-2xl text-red-500 font-thin">Rs. {{ product.price }}</span>
+</div>
+
+
+  <!-- Quantity and Add to Cart Block -->
+  <div class="flex flex-col md:flex-row md:items-center md:gap-3 mb-2 w-full">
+
+    <div class="flex items-center border border-black rounded-full overflow-hidden w-36 mb-3 md:mb-0">
+      <button onclick="decreaseQty()" class="px-5 py-2 bg-transparent text-xl text-black">-</button>
+      <input type="number" id="quantity" value="1" min="1"
+        class="w-14 text-center border-l border-r border-black focus:outline-none">
+      <button onclick="increaseQty()" class="px-5 py-2 bg-transparent text-xl text-black">+</button>
+    </div>
+
+    <div class="w-full md:w-auto">
+  <input type="hidden" id="hiddenQuantity" value="1">
+  <button type="button" id="addToCartButton"
+    class="w-full md:w-[387px] py-2 bg-pink-200 text-black font-medium rounded-full hover:bg-black hover:text-white transition text-center"
+    onclick="addToCart(3, parseInt(document.getElementById('hiddenQuantity').value))">
+    Add to Cart
+  </button>
+</div>
+
+
+  </div>
+
+  <!-- Buy It Now Button -->
+  <button
+  type="button"
+  onclick="buyItNow({{ product.id }})"
+  class="w-full md:w-[545px] py-3 bg-black text-white font-semibold rounded-full hover:bg-pink-200 hover:text-black transition text-center">
+  Buy It Now
+</button>
+
+
+  <!-- Description Section -->
+  <div class="mt-6">
+    <h3 class="text-lg font-semibold mb-2">Description</h3>
+    <p class="text-gray-600 leading-relaxed">
+        UV Ban Sunblock provides broad-spectrum UVA/UVB protection while moisturizing skin. Formulated with Vitamin E and SPF50, it shields skin from sun damage.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">Directions for Use</h3>
+      <p class="text-gray-600 leading-relaxed">
+        Apply generously on cleansed skin before sun exposure. Reapply after swimming or excessive sweating.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Quantity Functions -->
+<script>
+  function increaseQty() {
+    let qty = document.getElementById('quantity');
+    qty.value = parseInt(qty.value) + 1;
+    document.getElementById('hiddenQuantity').value = qty.value;
+  }
+
+  function decreaseQty() {
+    let qty = document.getElementById('quantity');
+    if (parseInt(qty.value) > 1) {
+      qty.value = parseInt(qty.value) - 1;
+      document.getElementById('hiddenQuantity').value = qty.value;
+    }
+  }
+
+  function shakeButton() {
+    const button = document.getElementById('addToCartButton');
+    button.classList.add('shake');
+    setTimeout(() => { button.classList.remove('shake'); }, 500);
+  }
+  setInterval(shakeButton, 5000);
+</script>
+
+<!-- You May Also Like -->
+<section class="best-sellers mt-12">
+  <h2 class="text-2xl font-bold mb-6">You May Also Like</h2>
+  <div class="best-sellers-grid">
+    {% for rec in recommendations %}
+    <div class="arrival-card relative">
+      <div class="image-wrap relative">
+        <a href="/product/{{ rec.id }}">
+          <img src="{{ url_for('static', filename=rec.image) }}" alt="{{ rec.name }}">
+        </a>
+
+        <!-- Floating Cart Icon (Mobile only) -->
+<button onclick="addToCart({{ rec.id }}, 1)" type="button" class="mobile-cart-button">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="black">
+    <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      m10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      M7.16 14.26l.03.02c.28.19.61.28.94.28H17v-2H9.42
+      l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59-.62 1.16
+      c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+  </svg>
+</button>
+
+<!-- Desktop Add to Cart Button -->
+<button onclick="addToCart({{ rec.id }}, 1)" type="button" class="desktop-cart-button">
+  <div class="button-wrapper">
+    <div class="text">Add to Cart</div>
+    <span class="icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2m10 0c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2M7.16 14.26l.03.02c.28.19.61.28.94.28
+          H17v-2H9.42l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59
+          -.62 1.16c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+      </svg>
+    </span>
+  </div>
+</button>
+
+
+      </div>
+
+      <h3><a href="/product/{{ rec.id }}">{{ rec.name }}</a></h3>
+      <div class="rating">★★★★★ <span>({{ rec.rating }})</span> <small>{{ rec.reviews }} Reviews</small></div>
+      <p>
+        <span class="text-gray-500 line-through mr-2">Rs. {{ rec.before_price }}</span>
+        <span class="text-red-500 font-thin">Rs. {{ rec.price }}</span>
+      </p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="reviews-section mt-12 px-4 md:px-8">
+  <h2 class="text-2xl font-bold mb-6">Customer Reviews</h2>
+
+  <div class="flex flex-col md:flex-row gap-8">
+
+    <!-- Ratings Breakdown (left on PC, top on mobile) -->
+    <div class="md:w-1/3 bg-gray-100 p-4 rounded-lg">
+      <h3 class="text-lg font-semibold mb-3">Product Rating</h3>
+      <p class="text-3xl font-bold text-pink-500 mb-2">5/5</p>
+      <p class="text-sm text-gray-500 mb-4">Based on 37 reviews</p>
+
+      <div class="space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-sm">5 ★</span>
+          <div class="w-3/4 bg-gray-300 h-2 rounded overflow-hidden">
+            <div class="bg-pink-400 h-2" style="width: 90%;"></div>
+          </div>
+          <span class="text-sm">21</span>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <span class="text-sm">4 ★</span>
+          <div class="w-3/4 bg-gray-300 h-2 rounded overflow-hidden">
+            <div class="bg-pink-400 h-2" style="width: 5%;"></div>
+          </div>
+          <span class="text-sm">16</span>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <span class="text-sm">3 ★</span>
+          <div class="w-3/4 bg-gray-300 h-2 rounded overflow-hidden">
+            <div class="bg-pink-400 h-2" style="width: 3%;"></div>
+          </div>
+          <span class="text-sm">0</span>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <span class="text-sm">2 ★</span>
+          <div class="w-3/4 bg-gray-300 h-2 rounded overflow-hidden">
+            <div class="bg-pink-400 h-2" style="width: 0%;"></div>
+          </div>
+          <span class="text-sm">0</span>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <span class="text-sm">1 ★</span>
+          <div class="w-3/4 bg-gray-300 h-2 rounded overflow-hidden">
+            <div class="bg-pink-400 h-2" style="width: 0%;"></div>
+          </div>
+          <span class="text-sm">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews and Filters (right side) -->
+    <div class="flex-1 space-y-6">
+
+      <!-- Filters and Write Review Button -->
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex gap-2 flex-wrap">
+          <button class="px-4 py-2 rounded-full border text-sm hover:bg-pink-100">Newest</button>
+          <button class="px-4 py-2 rounded-full border text-sm hover:bg-pink-100">Oldest</button>
+          <button class="px-4 py-2 rounded-full border text-sm hover:bg-pink-100">Highest Rating</button>
+          <button class="px-4 py-2 rounded-full border text-sm hover:bg-pink-100">Lowest Rating</button>
+        </div>
+        <button onclick="openReviewPopup()" class="bg-pink-200 hover:bg-black hover:text-white transition text-black font-medium rounded-full px-5 py-2">
+  Write a Review
+</button>
+
+
+      </div>
+  <div id="reviewsContainer">
+  {% include 'reviews_content.html' %}
+</div>
+  
+<!-- Review Modal -->
+<div id="reviewPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-lg shadow-lg w-[90%] md:w-[40%] p-6 relative">
+
+    <!-- Close button -->
+    <button onclick="closeReviewPopup()" class="absolute top-3 right-4 text-2xl text-gray-600 hover:text-black">&times;</button>
+
+    <h2 class="text-xl font-bold mb-4">Write a Review</h2>
+
+    <form id="reviewForm">
+      <input type="text" name="name" placeholder="Your Name" required class="w-full border px-4 py-2 rounded focus:outline-none mb-3">
+
+      <select name="rating" required class="w-full border px-4 py-2 rounded focus:outline-none mb-3">
+        <option value="">Select Rating</option>
+        <option value="5">5 ★★★★★</option>
+        <option value="4">4 ★★★★☆</option>
+        <option value="3">3 ★★★☆☆</option>
+        <option value="2">2 ★★☆☆☆</option>
+        <option value="1">1 ★☆☆☆☆</option>
+      </select>
+
+      <textarea name="comment" placeholder="Your Review" required class="w-full border px-4 py-2 rounded focus:outline-none h-28 mb-4"></textarea>
+
+      <button type="button" onclick="submitReview({{ product.id }})" class="w-full bg-pink-200 hover:bg-black hover:text-white transition text-black font-semibold rounded-full py-3">
+        Submit Review
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function openReviewPopup() {
+    document.getElementById('reviewPopup').classList.remove('hidden');
+  }
+
+  function closeReviewPopup() {
+    document.getElementById('reviewPopup').classList.add('hidden');
+  }
+
+  function submitReview(productId) {
+    const form = document.getElementById('reviewForm');
+    const formData = new FormData(form);
+
+    fetch(`/submit-review/${productId}`, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        closeReviewPopup();
+        form.reset();
+        fetch(`/get-reviews/${productId}`)
+          .then(resp => resp.text())
+          .then(html => {
+            document.getElementById('reviewsContainer').innerHTML = html;
+          });
+      }
+    })
+    .catch(err => console.error('Error submitting review:', err));
+
+    return false;
+  }
+</script>
+</div>
+</section>
+{% endblock %}

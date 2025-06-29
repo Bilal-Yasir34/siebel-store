@@ -1,0 +1,18 @@
+[
+  {
+    "email": "bilalyasir34@gmail.com",
+    "password": "scrypt:32768:8:1$tzAS67RuxUW23F5p$f57d97626e16dc35d35bd8f543f0d8bd4e15eb2f951afbb4a5b2f13d1c9c482779550ac3a0e719319590b5c57d142279ec9da5f76a49a2420f340061cb09faa9",
+    "contact_info": {
+      "email": "bilalyasir34@gmail.com",
+      "phone": "03467555698"
+    },
+    "shipping_info": {
+      "name": "Bilal Yasir",
+      "address": "Shadman Colony, Rehman Shaheed Road, Gujrat",
+      "city": "Gujrat",
+      "state": "",
+      "postal_code": "50700",
+      "country": "Pakistan"
+    }
+  }
+]

@@ -1,0 +1,20 @@
+{% for review in product_reviews %}
+<div class="border p-4 rounded mb-4">
+  <div class="flex justify-between items-center mb-2">
+    <h4 class="font-semibold">{{ review.name }}</h4>
+    <span class="text-sm text-gray-500">{{ review.date }}</span>
+  </div>
+  <div class="text-yellow-400 text-lg mb-1">
+    {{ '★' * review.rating }}{{ '☆' * (5 - review.rating) }}
+  </div>
+  <p class="text-gray-700 mb-2">{{ review.comment }}</p>
+
+  {% if review.get('id') in session.get('my_reviews', []) %}
+  <button onclick="deleteReview('{{ product.id }}', '{{ review.get('id') }}')" class="text-red-500 text-xs hover:underline">
+    Delete
+  </button>
+  {% endif %}
+</div>
+{% else %}
+<p class="text-gray-600">No reviews yet. Be the first to write one!</p>
+{% endfor %}

@@ -1,0 +1,130 @@
+<form action="{{ request.path }}" method="get">
+  <!-- Product Type Checkboxes -->
+  <div class="mb-6">
+    <h3 class="font-medium mb-2">Product Type</h3>
+    <div class="space-y-2 text-sm">
+
+      {% if '/new-arrivals' in request.path %}
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Face Wash" class="form-checkbox text-pink-500"> Face Wash
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Serum" class="form-checkbox text-pink-500"> Serum
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Sunblock" class="form-checkbox text-pink-500"> Sunblock
+        </label>
+
+      {% elif '/category/face-care' in request.path %}
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Face Wash" class="form-checkbox text-pink-500"> Face Wash
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Serum" class="form-checkbox text-pink-500"> Serum
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Sunblock" class="form-checkbox text-pink-500"> Sunblock
+        </label>
+
+      {% elif '/category/body-care' in request.path %}
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Lotion" class="form-checkbox text-pink-500"> Body Lotion
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Bar" class="form-checkbox text-pink-500"> Bars
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Soap" class="form-checkbox text-pink-500"> Soap
+        </label>
+
+      {% elif '/bundle-deals' in request.path %}
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Bundle" class="form-checkbox text-pink-500"> Bundle
+        </label>
+
+      {% elif '/vitamin-c-products' in request.path %}
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Serum" class="form-checkbox text-pink-500"> Serum
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Cream" class="form-checkbox text-pink-500"> Cream
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Sunblock" class="form-checkbox text-pink-500"> Sunblock
+        </label>
+
+      {% elif '/shop-all' in request.path %}
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Face Wash" class="form-checkbox text-pink-500"> Face Wash
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Serum" class="form-checkbox text-pink-500"> Serum
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Sunblock" class="form-checkbox text-pink-500"> Sunblock
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Body Lotion" class="form-checkbox text-pink-500"> Body Lotion
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Cream" class="form-checkbox text-pink-500"> Cream
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Soap" class="form-checkbox text-pink-500"> Soap
+        </label>
+
+        {% elif '/category/sun-protection' in request.path %}
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Sunblock" class="form-checkbox text-pink-500">
+          Sunblock
+        </label>
+        {% elif '/category/anti-itching' in request.path %}
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Bar" class="form-checkbox text-pink-500">
+          Anti-Itching Bars
+        </label>
+
+        {% elif '/category/hot-sellers' in request.path %}
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Sunblock" class="form-checkbox text-pink-500">
+          SunBlocks
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Cream" class="form-checkbox text-pink-500">
+          Creams
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Serum" class="form-checkbox text-pink-500">
+          Serums
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="type" value="Face Wash" class="form-checkbox text-pink-500">
+          Face Washes
+        </label>
+
+      {% endif %}
+
+    </div>
+  </div>
+
+  <!-- Dual Price Range -->
+  <div class="mb-6">
+    <h3 class="font-medium mb-2">Price Range (Rs)</h3>
+    <div class="flex justify-between text-sm mb-2">
+      <span id="minPriceLabel">500</span>
+      <span id="maxPriceLabel">5000</span>
+    </div>
+
+    <div class="relative h-2 bg-gray-300 rounded mb-4">
+      <input type="range" min="500" max="5000" value="500" name="min_price" id="minPrice"
+             class="absolute w-full opacity-0 h-2 z-20 cursor-pointer" step="100" oninput="updatePriceLabels()">
+      <input type="range" min="500" max="5000" value="5000" name="max_price" id="maxPrice"
+             class="absolute w-full opacity-0 h-2 z-20 cursor-pointer" step="100" oninput="updatePriceLabels()">
+      <div id="rangeTrack" class="absolute h-2 bg-pink-400 rounded left-0 right-0"></div>
+    </div>
+  </div>
+
+  <button type="submit" class="w-full bg-pink-400 text-white py-2 rounded-full hover:bg-pink-600 transition">
+    Apply Filters
+  </button>
+</form>

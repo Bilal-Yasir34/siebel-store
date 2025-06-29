@@ -1,0 +1,757 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Image Gallery -->
+<section class="gallery relative overflow-hidden">
+  <div id="galleryTrack" class="flex transition-transform duration-500 ease-in-out">
+    <img src="{{ url_for('static', filename='images/banner1.png') }}" alt="Banner 1" class="gallery-image">
+    <img src="{{ url_for('static', filename='images/banner2.png') }}" alt="Banner 2" class="gallery-image">
+    <img src="{{ url_for('static', filename='images/banner3.png') }}" alt="Banner 3" class="gallery-image">
+  </div>
+</section>
+
+<!-- New Arrivals -->
+<section class="new-arrivals mt-0">
+  <h2 class="text-2xl font-bold mb-6">New Arrivals</h2>
+  <div class="arrival-wrapper">
+    <button class="arrow left-arrow" onclick="moveArrivalLeft()">&#10094;</button>
+
+    <div class="arrival-track" id="arrivalTrack">
+
+      <!-- Repeat this block for each product -->
+
+      <!-- Product 1 -->
+      <div class="arrival-card relative">
+        <div class="image-wrap relative">
+          <div class="ribbon">% DISCOUNT</div>
+          <a href="/product/1">
+            <img src="{{ url_for('static', filename='images/RapiWhite-Serum.jpg') }}">
+          </a>
+
+          <!-- Mobile Cart Button -->
+          <button onclick="addToCart(1, 1)" type="button" class="mobile-cart-button">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="black">
+    <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      m10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      M7.16 14.26l.03.02c.28.19.61.28.94.28H17v-2H9.42
+      l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59-.62 1.16
+      c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+  </svg>
+</button>
+
+
+          <!-- Desktop Add to Cart Button -->
+          <button onclick="addToCart(1, 1)" type="button" class="desktop-cart-button">
+  <div class="button-wrapper">
+    <div class="text">Add to Cart</div>
+    <span class="icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2m10 0c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2M7.16 14.26l.03.02c.28.19.61.28.94.28
+          H17v-2H9.42l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59
+          -.62 1.16c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+      </svg>
+    </span>
+  </div>
+</button>
+
+
+        </div>
+        <h3><a href="/product/1">RapiWhite Serum</a></h3>
+        <div class="rating">★★★★★ <span>(4.9)</span> <small>17  Reviews</small></div>
+        <span class="old-price">Rs. 1,750</span>
+        <span class="new-price">Rs. 1,599</span>
+      </div>
+
+<div class="arrival-card relative">
+  <div class="image-wrap relative">
+    <div class="ribbon">% DISCOUNT</div>
+    <a href="/product/2">
+      <img src="{{ url_for('static', filename='images/AcneStop-FaceWash.jpg') }}">
+    </a>
+
+    <!-- Mobile Cart Button -->
+    <button onclick="addToCart(2, 1)" type="button" class="mobile-cart-button">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="black">
+    <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      m10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      M7.16 14.26l.03.02c.28.19.61.28.94.28H17v-2H9.42
+      l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59-.62 1.16
+      c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+  </svg>
+</button>
+
+    <!-- Desktop Add to Cart Button -->
+    <button onclick="addToCart(2, 1)" type="button" class="desktop-cart-button">
+  <div class="button-wrapper">
+    <div class="text">Add to Cart</div>
+    <span class="icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2m10 0c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2M7.16 14.26l.03.02c.28.19.61.28.94.28
+          H17v-2H9.42l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59
+          -.62 1.16c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+      </svg>
+    </span>
+  </div>
+</button>
+  </div>
+  <h3><a href="/product/2">AcneStop Face Wash</a></h3>
+  <div class="rating">★★★★★ <span>(4.9)</span> <small>17 Reviews</small></div>
+  <span class="old-price">Rs. 650</span>
+  <span class="new-price">Rs. 550</span>
+</div>
+
+<!-- Product 3 -->
+<div class="arrival-card relative">
+  <div class="image-wrap relative">
+    <div class="ribbon">% DISCOUNT</div>
+    <a href="/product/3">
+      <img src="{{ url_for('static', filename='images/UvBan.jpg') }}">
+    </a>
+    <!-- Mobile Cart Button -->
+    <button onclick="addToCart(3, 1)" type="button" class="mobile-cart-button">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="black">
+    <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      m10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      M7.16 14.26l.03.02c.28.19.61.28.94.28H17v-2H9.42
+      l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59-.62 1.16
+      c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+  </svg>
+</button>
+
+    <!-- Desktop Cart Button -->
+
+    <button onclick="addToCart(3, 1)" type="button" class="desktop-cart-button">
+  <div class="button-wrapper">
+    <div class="text">Add to Cart</div>
+    <span class="icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2m10 0c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2M7.16 14.26l.03.02c.28.19.61.28.94.28
+          H17v-2H9.42l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59
+          -.62 1.16c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+      </svg>
+    </span>
+  </div>
+</button>
+  </div>
+  <h3><a href="/product/3">UV Ban Sunblock</a></h3>
+  <div class="rating">★★★★★ <span>(4.9)</span> <small>17 Reviews</small></div>
+  <span class="old-price">Rs. 595</span>
+  <span class="new-price">Rs. 560</span>
+</div>
+
+<!-- Product 4 -->
+<div class="arrival-card relative">
+  <div class="image-wrap relative">
+    <div class="ribbon">% DISCOUNT</div>
+    <a href="/product/4">
+      <img src="{{ url_for('static', filename='images/RapiWhite-Cream.jpg') }}">
+    </a>
+    <!-- Mobile Cart Button -->
+    <button onclick="addToCart(4, 1)" type="button" class="mobile-cart-button">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="black">
+    <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      m10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      M7.16 14.26l.03.02c.28.19.61.28.94.28H17v-2H9.42
+      l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59-.62 1.16
+      c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+  </svg>
+</button>
+    <!-- Desktop Cart Button -->
+
+    <button onclick="addToCart(4, 1)" type="button" class="desktop-cart-button">
+  <div class="button-wrapper">
+    <div class="text">Add to Cart</div>
+    <span class="icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2m10 0c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2M7.16 14.26l.03.02c.28.19.61.28.94.28
+          H17v-2H9.42l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59
+          -.62 1.16c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+      </svg>
+    </span>
+  </div>
+</button>
+  </div>
+  <h3><a href="/product/4">RapiWhite Cream</a></h3>
+  <div class="rating">★★★★★ <span>(4.8)</span> <small>14</small></div>
+  <span class="old-price">Rs. 1,295</span>
+  <span class="new-price">Rs. 1,150</span>
+</div>
+
+<!-- Product 5 -->
+<div class="arrival-card relative">
+  <div class="image-wrap relative">
+    <div class="ribbon">% DISCOUNT</div>
+    <a href="/product/5">
+      <img src="{{ url_for('static', filename='images/AcneStop-Serum.jpg') }}">
+    </a>
+    <!-- Mobile Cart Button -->
+    <button onclick="addToCart(5, 1)" type="button" class="mobile-cart-button">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="black">
+    <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      m10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      M7.16 14.26l.03.02c.28.19.61.28.94.28H17v-2H9.42
+      l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59-.62 1.16
+      c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+  </svg>
+</button>
+    <!-- Desktop Cart Button -->
+
+    <button onclick="addToCart(5, 1)" type="button" class="desktop-cart-button">
+  <div class="button-wrapper">
+    <div class="text">Add to Cart</div>
+    <span class="icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2m10 0c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2M7.16 14.26l.03.02c.28.19.61.28.94.28
+          H17v-2H9.42l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59
+          -.62 1.16c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+      </svg>
+    </span>
+  </div>
+</button>
+  </div>
+  <h3><a href="/product/5">AcneStop Serum</a></h3>
+  <div class="rating">★★★★★ <span>(4.7)</span> <small>12 Reviews</small></div>
+  <span class="old-price">Rs. 1,750</span>
+  <span class="new-price">Rs. 1,599</span>
+</div>
+
+<!-- Product 6 -->
+<div class="arrival-card relative">
+  <div class="image-wrap relative">
+    <div class="ribbon">% DISCOUNT</div>
+    <a href="/product/6">
+      <img src="{{ url_for('static', filename='images/OilRich-Lotion.jpg') }}">
+    </a>
+    <!-- Mobile Cart Button -->
+    <button onclick="addToCart(6, 1)" type="button" class="mobile-cart-button">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="black">
+    <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      m10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      M7.16 14.26l.03.02c.28.19.61.28.94.28H17v-2H9.42
+      l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59-.62 1.16
+      c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+  </svg>
+</button>
+    <!-- Desktop Cart Button -->
+
+    <button onclick="addToCart(6, 1)" type="button" class="desktop-cart-button">
+  <div class="button-wrapper">
+    <div class="text">Add to Cart</div>
+    <span class="icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2m10 0c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2M7.16 14.26l.03.02c.28.19.61.28.94.28
+          H17v-2H9.42l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59
+          -.62 1.16c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+      </svg>
+    </span>
+  </div>
+</button>
+  </div>
+  <h3><a href="/product/6">OilRich Lotion</a></h3>
+  <div class="rating">★★★★★ <span>(5.0)</span> <small>20 Reviews</small></div>
+  <span class="old-price">Rs. 650</span>
+  <span class="new-price">Rs. 600</span>
+</div>
+  </div>
+
+    <button class="arrow right-arrow" onclick="moveArrivalRight()">&#10095;</button>
+  </div>
+</section>
+
+
+
+
+    <!-- Categories Section -->
+  <section class="my-12 px-4 max-w-7xl mx-auto">
+  <h2 class="text-3xl font-bold mb-8 text-center">Shop by Category</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    
+    <!-- Category 1 -->
+    <a href="/category/face-care" class="block overflow-hidden">
+      <img src="{{ url_for('static', filename='images/FaceCare_ctg.jpg') }}" alt="Face Care" class="w-full h-120 object-cover">
+    </a>
+
+    <!-- Category 2 -->
+    <a href="/category/body-care" class="block overflow-hidden" title="View Body Care Products">
+  <img src="{{ url_for('static', filename='images/BodyCare_ctg.jpg') }}" alt="Body Care" class="w-full h-120 object-cover">
+</a>
+
+    <!-- Category 3 -->
+    <a href="/category/sun-protection" class="block overflow-hidden">
+      <img src="{{ url_for('static', filename='images/SunProtection_ctg.jpg') }}" alt="Bundle Deals" class="w-full h-120 object-cover">
+    </a>
+    <!-- Category 4 -->
+    <a href="/category/anti-itching" class="block overflow-hidden">
+      <img src="{{ url_for('static', filename='images/Anti_Itching_ctg.jpg') }}" alt="Body Care" class="w-full h-120 object-cover">
+    </a>
+    <!-- Category 5 -->
+    <a href="/bundle-deals" class="block overflow-hidden">
+      <img src="{{ url_for('static', filename='images/Bundles_ctg.jpg') }}" alt="Body Care" class="w-full h-120 object-cover">
+    </a>
+    <!-- Category 6 -->
+    <a href="/category/hot-sellers" class="block overflow-hidden">
+      <img src="{{ url_for('static', filename='images/HotSellers_ctg.jpg') }}" alt="Body Care" class="w-full h-120 object-cover">
+    </a>
+
+  </div>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
+  {% for category in categories %}
+  <div class="bg-white shadow rounded p-4 text-center">
+    <h3 class="text-lg font-semibold">{{ category.name }}</h3>
+  </div>
+  {% endfor %}
+</div>
+
+</section>
+
+<!-- Best Sellers -->
+<section class="best-sellers mt-12">
+  <h2 class="text-2xl font-bold mb-6">Best Sellers</h2>
+  <div class="best-sellers-grid">
+
+    <!-- Product 1 -->
+    <div class="arrival-card relative">
+      <div class="image-wrap relative">
+        <div class="ribbon">% DISCOUNT</div>
+        <a href="/product/1">
+          <img src="{{ url_for('static', filename='images/RapiWhite-Serum.jpg') }}" alt="RapiWhite Serum">
+        </a>
+
+        <!-- Mobile Cart Button -->
+    <button onclick="addToCart(6, 1)" type="button" class="mobile-cart-button">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="black">
+    <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      m10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      M7.16 14.26l.03.02c.28.19.61.28.94.28H17v-2H9.42
+      l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59-.62 1.16
+      c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+  </svg>
+</button>
+    <!-- Desktop Cart Button -->
+
+    <button onclick="addToCart(6, 1)" type="button" class="desktop-cart-button">
+  <div class="button-wrapper">
+    <div class="text">Add to Cart</div>
+    <span class="icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2m10 0c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2M7.16 14.26l.03.02c.28.19.61.28.94.28
+          H17v-2H9.42l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59
+          -.62 1.16c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+      </svg>
+    </span>
+  </div>
+</button>
+
+      </div>
+      <h3><a href="/product/1">RapiWhite Serum</a></h3>
+      <div class="rating">★★★★★ <span>(5.0)</span> <small>38 Reviews</small></div>
+      <span class="old-price">Rs. 1,750</span>
+      <span class="new-price">Rs. 1,599</span>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="arrival-card relative">
+      <div class="image-wrap relative">
+        <div class="ribbon">% DISCOUNT</div>
+        <a href="/product/9">
+          <img src="{{ url_for('static', filename='images/RapiWhite-FaceWash.jpg') }}" alt="RapiWhite FaceWash">
+        </a>
+        <!-- Mobile Cart Button -->
+    <button onclick="addToCart(9, 1)" type="button" class="mobile-cart-button">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="black">
+    <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      m10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      M7.16 14.26l.03.02c.28.19.61.28.94.28H17v-2H9.42
+      l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59-.62 1.16
+      c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+  </svg>
+</button>
+    <!-- Desktop Cart Button -->
+
+    <button onclick="addToCart(9, 1)" type="button" class="desktop-cart-button">
+  <div class="button-wrapper">
+    <div class="text">Add to Cart</div>
+    <span class="icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2m10 0c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2M7.16 14.26l.03.02c.28.19.61.28.94.28
+          H17v-2H9.42l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59
+          -.62 1.16c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+      </svg>
+    </span>
+  </div>
+</button>
+      </div>
+      <h3><a href="/product/9">RapiWhite FaceWash</a></h3>
+      <div class="rating">★★★★★ <span>(4.1)</span> <small>24 Reviews</small></div>
+      <span class="old-price">Rs. 999</span>
+      <span class="new-price">Rs. 950</span>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="arrival-card">
+      <div class="image-wrap relative">
+        <div class="ribbon">% DISCOUNT</div>
+        <a href="/product/3">
+          <img src="{{ url_for('static', filename='images/UvBan.jpg') }}" alt="UV Ban Sunblock">
+        </a>
+        <!-- Mobile Cart Button -->
+    <button onclick="addToCart(3, 1)" type="button" class="mobile-cart-button">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="black">
+    <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      m10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      M7.16 14.26l.03.02c.28.19.61.28.94.28H17v-2H9.42
+      l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59-.62 1.16
+      c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+  </svg>
+</button>
+    <!-- Desktop Cart Button -->
+
+    <button onclick="addToCart(3, 1)" type="button" class="desktop-cart-button">
+  <div class="button-wrapper">
+    <div class="text">Add to Cart</div>
+    <span class="icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2m10 0c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2M7.16 14.26l.03.02c.28.19.61.28.94.28
+          H17v-2H9.42l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59
+          -.62 1.16c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+      </svg>
+    </span>
+  </div>
+</button>
+      </div>
+      <h3><a href="/product/3">UV Ban Sunblock</a></h3>
+      <div class="rating">★★★★★ <span>(4.8)</span> <small>33 Reviews</small></div>
+      <span class="old-price">Rs. 595</span>
+      <span class="new-price">Rs. 560</span>
+    </div>
+
+    <!-- Product 4 -->
+    <div class="arrival-card">
+      <div class="image-wrap relative">
+        <div class="ribbon">% DISCOUNT</div>
+        <a href="/product/7">
+          <img src="{{ url_for('static', filename='images/RapiWhite-FullBwc.jpg') }}" alt="RapiWhite Full Body Lotion">
+        </a>
+        <!-- Mobile Cart Button -->
+    <button onclick="addToCart(7, 1)" type="button" class="mobile-cart-button">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="black">
+    <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      m10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
+      M7.16 14.26l.03.02c.28.19.61.28.94.28H17v-2H9.42
+      l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59-.62 1.16
+      c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+  </svg>
+</button>
+    <!-- Desktop Cart Button -->
+
+    <button onclick="addToCart(7, 1)" type="button" class="desktop-cart-button">
+  <div class="button-wrapper">
+    <div class="text">Add to Cart</div>
+    <span class="icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2m10 0c-1.1 0-2 .9-2 2s.9 2 2 2
+          2-.9 2-2-.9-2-2-2M7.16 14.26l.03.02c.28.19.61.28.94.28
+          H17v-2H9.42l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59
+          -.62 1.16c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+      </svg>
+    </span>
+  </div>
+</button>
+      </div>
+      <h3><a href="/product/7">RapiWhite Full Body Whitening Lotion</a></h3>
+      <div class="rating">★★★★★ <span>(4.9)</span> <small>22 Reviews</small></div>
+      <span class="old-price">Rs. 1,750</span>
+      <span class="new-price">Rs. 1,599</span>
+    </div>
+
+  </div>
+</section>
+
+
+          <!-- FAQs -->
+        <section class="faq-section max-w-7xl mx-auto mt-12 px-4">
+  <h2 class="text-2xl font-bold mb-6 text-center">FAQs</h2>
+
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      <span>What is the delivery time?</span>
+      <div class="faq-icon">+</div>
+    </div>
+    <div class="faq-answer">We as a company believe in fast deliveries.</div>
+    <div class="faq-answer">Delivery typically takes 5-7 working days within Pakistan via PostEX courier.</div>
+    <div class="faq-answer">For Delivery Issues & Information Please call or Whatsapp.</div>
+    <div class="faq-answer">Whatsapp: 0327-99-75-574.</div>
+    </div>
+
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      <span>Is cash on delivery available?</span>
+      <div class="faq-icon">+</div>
+    </div>
+    <div class="faq-answer">Yes! We offer Cash on Delivery service nationwide.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      <span>Are your products genuine?</span>
+      <div class="faq-icon">+</div>
+    </div>
+    <div class="faq-answer">Absolutely — all our products are original and sourced directly from authorized distributors.</div>
+  </div>
+</section>
+
+<!-- Delivery Features Section -->
+<section class="delivery-features mt-10">
+  <div class="delivery-feature">
+    <div class="icon-circle">
+      <i class="fas fa-shipping-fast"></i>
+    </div>
+    <h4>Free Shipping</h4>
+    <p>Free shipping on orders above Rs. 750</p>
+  </div>
+
+  <div class="delivery-feature">
+    <div class="icon-circle">
+      <i class="fas fa-headset"></i>
+    </div>
+    <h4>Customer Support</h4>
+    <p>Contact us 10AM to 8PM(Mon to Sat)</p>
+  </div>
+
+  <div class="delivery-feature">
+    <div class="icon-circle">
+      <i class="fas fa-lock"></i>
+    </div>
+    <h4>Secure Payment</h4>
+    <p>Payment secure Secure your payment
+with our trusted payment system</p>
+  </div>
+</section>
+
+  <!-- Why Siebel is the Best Section -->
+<section class="why-best-section bg-white py-12 px-6 text-left">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-left">Why Siebel Skincare is the Best in Pakistan</h2>
+
+    <p class="text-gray-700 mb-5 leading-relaxed">
+      Pakistan’s skincare and beauty market is full of options — but at <strong>Siebel</strong>, we believe your skin deserves more than just ordinary. That’s why we’ve dedicated ourselves to delivering premium, natural, and effective skincare tailored specifically for Pakistani skin.
+    </p>
+
+    <h3 class="text-lg font-semibold text-gray-800 mb-3">Premium, Natural & Thoughtfully Crafted Skincare</h3>
+    <p class="text-gray-700 mb-5 leading-relaxed">
+      Siebel Skincare is built on a promise to provide safe, organic, dermatologically tested products that are free from harsh chemicals, sulphates, and parabens. Our carefully formulated collection includes face washes, serums, sunblocks, creams, and lotions — all created with nature’s finest ingredients to ensure visible, healthy, and lasting results.
+    </p>
+    <p class="text-gray-700 mb-5 leading-relaxed">
+      We proudly source ingredients like vitamin C, glutathione, saffron, and aloe vera, chosen for their time-tested benefits and suitability for local skin concerns. Whether it’s to brighten, hydrate, or protect — Siebel’s products are designed to address the needs of Pakistani skin in every season.
+    </p>
+
+    <h3 class="text-lg font-semibold text-gray-800 mb-3">Ethical Beauty with Purpose</h3>
+    <p class="text-gray-700 mb-5 leading-relaxed">
+      What sets <strong>Siebel</strong> apart isn’t just our formulations — it’s our philosophy. We stand by ethical sourcing, sustainability, and honesty in beauty. Every product we make supports healthier skin while respecting the environment.
+    </p>
+    <p class="text-gray-700 mb-5 leading-relaxed">
+      Siebel Skincare has earned a trusted reputation for delivering real, proven results, becoming a preferred brand among those seeking reliable, ethical, and effective skincare in Pakistan.
+    </p>
+    <p class="text-gray-700 leading-relaxed">
+      From gentle acne solutions to glow-boosting serums, nourishing body care to sun protection — <strong>Siebel</strong> has something tailored for every skin type and need. Experience the difference where natural beauty meets modern skincare science, only at Siebel.
+    </p>
+  </div>
+
+<!-- Follow us on Instagram -->
+<section class="instagram-section mt-16">
+  <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">@Follow Us On Instagram</h2>
+
+  <div class="insta-wrapper relative overflow-hidden">
+    <!-- Left Arrow -->
+    <button class="insta-arrow left" onclick="moveInstaLeft()">
+      &#10094;
+    </button>
+
+    <!-- Instagram Gallery Track -->
+    <div id="instaTrack" class="insta-track">
+      <a href="https://www.instagram.com/p/DJO8OI5tvUM/?hl=en" target="_blank">
+        <img src="{{ url_for('static', filename='images/insta1.png') }}" class="insta-img">
+      </a>
+      <a href="http://instagram.com/p/DD34eVjoCyu/?hl=en&img_index=1" target="_blank">
+        <img src="{{ url_for('static', filename='images/insta2.png') }}" class="insta-img">
+      </a>
+      <a href="https://www.instagram.com/p/DDHmh66IzU9/?hl=en" target="_blank">
+        <img src="{{ url_for('static', filename='images/insta3.png') }}" class="insta-img">
+      </a>
+      <a href="https://www.instagram.com/p/DA5-5olSB47/?hl=en" target="_blank">
+        <img src="{{ url_for('static', filename='images/insta4.png') }}" class="insta-img">
+      </a>
+      <a href="https://www.instagram.com/p/DAtnZFJN-4u/?hl=en" target="_blank">
+        <img src="{{ url_for('static', filename='images/insta5.png') }}" class="insta-img">
+      </a>
+      <a href="https://www.instagram.com/p/C-frMrkNYki/?hl=en&img_index=1" target="_blank">
+        <img src="{{ url_for('static', filename='images/insta6.png') }}" class="insta-img">
+      </a>
+    </div>
+
+    <!-- Right Arrow -->
+    <button class="insta-arrow right" onclick="moveInstaRight()">
+      &#10095;
+    </button>
+  </div>
+</section>
+
+
+
+
+{% endblock %}
+
+
+  <script>
+    let currentIndex = 0;
+    const images = document.querySelectorAll('#galleryTrack img');
+    const track = document.getElementById('galleryTrack');
+    const totalImages = images.length;
+    
+    function moveGallery() {
+      currentIndex++;
+      if (currentIndex >= totalImages) {
+        currentIndex = 0;
+      }
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+    
+    // Run it every 5 seconds
+    setInterval(moveGallery, 5000);
+    </script>
+    
+    <script>
+      let arrivalPos = 0;
+      const arrivalTrack = document.getElementById('arrivalTrack');
+      const arrivalCards = document.querySelectorAll('.arrival-card');
+      const cardWidth = arrivalCards[0].offsetWidth + 16; // card + margin
+      
+      function moveArrivalLeft() {
+        arrivalPos -= cardWidth;
+        if (arrivalPos < 0) {
+          arrivalPos = (cardWidth * (arrivalCards.length - 1));
+        }
+        arrivalTrack.style.transform = `translateX(-${arrivalPos}px)`;
+      }
+      
+      function moveArrivalRight() {
+        arrivalPos += cardWidth;
+        if (arrivalPos >= cardWidth * arrivalCards.length) {
+          arrivalPos = 0;
+        }
+        arrivalTrack.style.transform = `translateX(-${arrivalPos}px)`;
+      }
+      let startX = 0;
+let isDragging = false;
+
+const arrivalWrapper = document.querySelector(".arrival-wrapper");
+
+arrivalWrapper.addEventListener("touchstart", (e) => {
+  startX = e.touches[0].clientX;
+  isDragging = true;
+});
+
+arrivalWrapper.addEventListener("touchmove", (e) => {
+  if (!isDragging) return;
+  const currentX = e.touches[0].clientX;
+  const diff = startX - currentX;
+
+  // Move right
+  if (diff > 50) {
+    moveArrivalRight();
+    isDragging = false;
+  }
+
+  // Move left
+  if (diff < -50) {
+    moveArrivalLeft();
+    isDragging = false;
+  }
+});
+
+arrivalWrapper.addEventListener("touchend", () => {
+  isDragging = false;
+});
+const faqQuestions = document.querySelectorAll(".faq-question");
+
+faqQuestions.forEach(button => {
+  button.addEventListener("click", () => {
+    const answer = button.nextElementSibling;
+
+    if (answer.style.display === "block") {
+      answer.style.display = "none";
+    } else {
+      // Close other open answers
+      document.querySelectorAll(".faq-answer").forEach(item => {
+        item.style.display = "none";
+      });
+      answer.style.display = "block";
+    }
+  });
+});
+function showCartToast() {
+  const toast = document.getElementById("cart-toast");
+  toast.style.display = "block";
+  setTimeout(() => {
+    toast.style.display = "none";
+  }, 3000);
+}
+
+const addToCartButtons = document.querySelectorAll(".button");
+
+addToCartButtons.forEach(button => {
+  button.addEventListener("click", (e) => {
+    e.preventDefault();
+    showCartToast();
+  });
+});
+      </script>      
+
+<!-- Quantity control script here, before </body> -->
+<script>
+  function increaseQty() {
+    var qtyInput = document.getElementById("quantityInput");
+    var currentQty = parseInt(qtyInput.value);
+    qtyInput.value = currentQty + 1;
+  }
+
+  function decreaseQty() {
+    var qtyInput = document.getElementById("quantityInput");
+    var currentQty = parseInt(qtyInput.value);
+    if (currentQty > 1) {
+      qtyInput.value = currentQty - 1;
+    }
+  }
+
+  function addToCart() {
+    var qty = document.getElementById("quantityInput").value;
+    alert(qty + " item(s) added to cart!");
+  }
+  
+</script>
+</body>
+</html>
+
+</body>
+</html>

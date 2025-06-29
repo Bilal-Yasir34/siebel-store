@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Siebel Skincare</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+  body {
+    font-family: 'Quicksand', sans-serif;
+  }
+</style>
+
+
+  <!-- Topbar -->
+<div class="topbar bg-pink-100 text-white text-sm text-center py-2">
+  <p>📦 Free Delivery Nationwide on Orders above RS.750</p>
+</div>
+</head>
+
+<body class="bg-white text-gray-800">
+
+  <!-- Cart Notification -->
+  <div id="notification" class="hidden fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-pink-200 text-black font-medium px-6 py-3 rounded-full shadow z-50"></div>
+
+  <!-- Header (Hide only on homepage) -->
+  <header class="border-b border-gray-200 shadow sticky top-0 bg-white z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center py-3 px-4">
+
+      <div class="hidden md:flex space-x-4">
+
+  <!-- Facebook -->
+  <a href="https://www.facebook.com/siebel.store" target="_blank" rel="noopener noreferrer" class="group relative">
+    <i class="fab fa-facebook-f text-black text-lg transition duration-300 group-hover:text-[#1877F2]"></i>
+    <span class="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap">Facebook</span>
+  </a>
+
+  <!-- Instagram -->
+  <a href="https://www.instagram.com/siebel.skincare" target="_blank" rel="noopener noreferrer" class="group relative">
+    <i class="fab fa-instagram text-black text-lg transition duration-300 group-hover:text-[#E1306C]"></i>
+    <span class="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap">Instagram</span>
+  </a>
+
+  <!-- WhatsApp -->
+  <a href="https://wa.me/923279975574" target="_blank" rel="noopener noreferrer" class="group relative">
+    <i class="fab fa-whatsapp text-black text-lg transition duration-300 group-hover:text-[#25D366]"></i>
+    <span class="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition duration-300 whitespace-nowrap">WhatsApp</span>
+  </a>
+
+</div>
+
+
+
+    <!-- Logo -->
+      <div class="hidden md:block">
+        <a href="/"><img src="{{ url_for('static', filename='images/siebel-logo.png') }}" alt="Siebel" class="h-120 md:h-[100px]"></a>
+      </div>
+
+      <!-- PC Icons -->
+      <div class="flex items-center gap-4 hidden md:flex">
+
+      <button onclick="toggleSearchDrawer()" class="h-5 w-5">
+      <a href="#"><img src="{{ url_for('static', filename='images/search.png') }}" class="h-5 w-5 icon-hover"></a>
+      </button>
+<a href="/login"><img src="{{ url_for('static', filename='images/user.png') }}" class="h-5 w-5 icon-hover"></a>
+
+<a href="/wishlist" class="icon-badge">
+<img src="{{ url_for('static', filename='images/favourite.png') }}" class="h-5 w-5 icon-hover">
+<span id="wishlist-count" class="count-badge">0</span>
+</a>
+
+<a href="javascript:void(0)" onclick="toggleCart()" class="icon-badge">
+  <img src="{{ url_for('static', filename='images/shopping-cart.png') }}" class="h-5 w-5 icon-hover">
+  <span id="cart-count" class="count-badge">0</span>
+</a> 
+</div>
+
+      <!-- Mobile Menu -->
+      <div class="flex items-center justify-between w-full md:hidden px-4 py-0">
+  <!-- Menu Icon -->
+  <button onclick="toggleMobileMenu()">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+
+  <!-- Logo Centered -->
+  <a href="/" class="mx-auto">
+    <img src="{{ url_for('static', filename='images/siebel-logo.png') }}" alt="Siebel" class="h-16">
+  </a>
+
+  <!-- Icons -->
+  <div class="flex items-center gap-3">
+
+      <button onclick="toggleSearchDrawer()" class="h-5 w-5">
+      <img src="{{ url_for('static', filename='images/search.png') }}" class="h-5 w-5">
+      </button>
+
+      
+  <a href="javascript:void(0)" onclick="toggleCart()" class="icon-badge">
+  <img src="{{ url_for('static', filename='images/shopping-cart.png') }}" class="h-5 w-5 icon-hover">
+  <span id="cart-count" class="count-badge">0</span>
+</a>
+
+</div>
+  </header>
+
+<!-- Mobile Side Menu Drawer -->
+<div id="mobileMenu" class="fixed top-0 left-0 w-72 h-full bg-white shadow-lg transform -translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+  <div class="p-4 border-b flex items-center justify-between">
+    <h2 class="text-lg font-bold">Menu</h2>
+    <button onclick="toggleMobileMenu()" class="text-2xl">&times;</button>
+  </div>
+
+  <nav class="flex flex-col">
+    <a href="/" class="mobile-link">Home</a>
+    <a href="/new-arrivals" class="mobile-link">New Arrival</a>
+    <a href="/shop-all" class="mobile-link">Shop All</a>
+    <a href="/bundle-deals" class="mobile-link">Bundle Deals</a>
+    <a href="/vitamin-c-products" class="mobile-link">Vitamin C Products</a>
+    <a href="/customer.reviews" class="mobile-link">Customer Reviews</a>
+  </nav>
+
+  <div class="mt-4">
+  {% if session['user'] %}
+    <a href="/logout" class="block bg-red-400 text-white text-center font-semibold px-4 py-3 hover:bg-red-500 transition">Logout</a>
+  {% else %}
+    <a href="/login" class="block bg-pink-300 text-black text-center font-semibold px-4 py-3 hover:bg-pink-400 transition">Login / Register</a>
+  {% endif %}
+</div>
+
+
+  <div class="text-xs text-gray-500 text-left px-4 py-6 border-t mt-4">
+    <h3 class="text-sm font-semibold mb-2">Need Help?</h3>
+    <p>📞 +92 327 9975574</p>
+    <p>✉️ contact@siebel.store</p>
+  </div>
+</div>
+
+  <!-- Sub Navigation (on homepage only) -->
+{% if request.endpoint in [
+  'home',
+  'product_page',
+  'new_arrivals',
+  'shop_all',
+  'hot_sellers',
+  'vitamin_c_products',
+  'customer_reviews',
+  'bundle_deals',
+  'face_care_category',
+  'body_care_category',
+  'sun_protection_category',
+  'anti_itching_category'
+] %}
+<nav class="hidden md:flex justify-center gap-6 py-2 bg-white border-gray-200 text-black text-sm font-medium sticky top-[115px] z-50">
+  <a href="/" class="nav-link hover:text-pink-500">Home</a>
+  <a href="/new-arrivals" class="hover:text-pink-500">New Arrival</a>
+  <a href="/shop-all" class="hover:text-pink-500">Shop All</a>
+  <a href="/bundle-deals" class="hover:text-pink-500">Bundle Deals</a>
+  <a href="/vitamin-c-products" class="hover:text-pink-500">Vitamin C Products</a>
+  <a href="/customer-reviews" class="hover:text-pink-500">Customer Reviews</a>
+</nav>
+{% endif %}
+
+
+  <!-- Page Content -->
+  <main class="py-0 md:py-0">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 text-gray-600 py-10 px-6 mt-12">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+        <p>Siebel Skincare</p>
+        <p>Hajvery Complex, Lahore, Pakistan</p>
+        <p>+92 327 9975574</p>
+        <p>contact@siebel.store</p>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Shop</h3>
+        <ul class="space-y-2">
+          <li><a href="/#best-sellers" class="hover:text-pink-300 transition">Best Selling</a></li>
+          <li><a href="/categories/face-care" class="hover:text-pink-300 transition">Face Care</a></li>
+          <li><a href="/categories/bundle-deals" class="hover:text-pink-300 transition">Bundle Deals</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Help</h3>
+        <ul class="space-y-2">
+          <li><a href="/privacy-policy" class="hover:text-pink-300 transition">Privacy Policy</a></li>
+          <li><a href="/refund-policy" class="hover:text-pink-300 transition">Refund Policy</a></li>
+          <li><a href="/shipping-policy" class="hover:text-pink-300 transition">Shipping Policy</a></li>
+          <li><a href="/terms-of-service" class="hover:text-pink-300 transition">Terms of Service</a></li>
+          <li><a href="/faq" class="hover:text-pink-300 transition">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-bold mb-4">Newsletter</h3>
+        <p class="mb-4">Subscribe for exclusive offers & updates:</p>
+        <form class="flex">
+          <input type="email" placeholder="Enter your email" class="rounded-full px-4 py-2 text-black w-full focus:outline-none" required>
+          <button type="submit" class="bg-pink-300 hover:bg-white hover:text-black transition text-black font-semibold rounded-full px-4 py-2 ml-2">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="mt-8 text-center text-gray-400 text-sm">
+      &copy; 2025 Siebel Skincare. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('added') === '1') {
+      showNotification('Product added to cart!');
+    }
+  </script>
+<!-- Nav Bar Buttons Working-->
+
+      <!-- Search Bar  -->
+<div id="searchDrawer" class="fixed top-0 right-0 h-full bg-white shadow transform translate-x-full transition-transform duration-300 z-50 w-80 md:w-[400px] flex flex-col">
+  <div class="flex justify-between items-center p-4 border-b">
+    <h2 class="text-lg font-bold">SEARCH OUR SITE</h2>
+    <button onclick="toggleSearchDrawer()" class="text-2xl">&times;</button>
+  </div>
+  <form method="GET" action="/search" class="flex flex-col p-4 gap-4 flex-grow">
+    <input type="text" name="q" placeholder="Search products..." class="border border-gray-300 px-4 py-2 rounded focus:outline-none" required>
+    <button type="submit" class="bg-pink-300 hover:bg-pink-400 text-white font-semibold px-4 py-2 rounded">Search</button>
+  </form>
+</div>
+
+<!-- Cart Slide Panel -->
+<div id="cartPanel" class="fixed top-0 right-0 w-80 h-full bg-white shadow-lg z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+  <div class="flex items-center justify-between p-4 border-b">
+    <h2=text-xl font-bold>Shopping Cart</h2=text-xl>
+    <button onclick="toggleCart()" class="text-gray-500 hover:text-black text-2xl">&times;</button>
+  </div>
+
+  <!-- Product list -->
+  <div id="cartContent" class="flex-1 overflow-y-auto p-4"></div>
+
+  <!-- Subtotal + Checkout -->
+  <div id="cartSummary" class="border-t p-4 hidden">
+    <div class="flex justify-between font-semibold text-lg mb-4">
+      <span>Subtotal:</span>
+      <span id="cartSubtotal">Rs. 0</span>
+    </div>
+    <a href="/checkout" class="block bg-black text-white text-center py-3 rounded hover:bg-pink-300 hover:text-black transition">Proceed to Checkout</a>
+  </div>
+</div>
+

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order #{{ order.id }} | Siebel Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="/static/favicon.ico">
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+<div class="flex flex-col md:flex-row">
+
+  <!-- Sidebar (Desktop only) -->
+  <aside class="hidden md:block w-60 bg-white shadow h-screen p-4">
+    <h1 class="text-2xl font-bold mb-6 text-blue-600">Siebel Admin</h1>
+    <nav class="space-y-4">
+      <a href="/admin-dashboard" class="block p-2 rounded hover:bg-blue-50">📊 Dashboard</a>
+      <a href="/admin/orders" class="block p-2 rounded hover:bg-blue-50">📑 Orders</a>
+      <a href="/customer-reviews" class="block p-2 rounded hover:bg-blue-50">⭐ Reviews</a>
+      <a href="/" class="block p-2 rounded text-green-600 hover:bg-green-50">🏬 Store</a>
+      <a href="/admin-logout" class="block p-2 rounded text-red-600 hover:bg-red-50">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-4 md:p-8 space-y-8">
+
+    <h2 class="text-2xl md:text-3xl font-bold flex items-center"><span class="mr-2">🧾</span> Order #{{ order.id }}</h2>
+
+    <!-- Customer Details -->
+    <div class="bg-white p-5 md:p-6 rounded-lg shadow hover:shadow-md transition">
+      <h3 class="text-lg md:text-xl font-semibold mb-3">👤 Customer Details</h3>
+      <p><strong>Name:</strong> {{ order.name }}</p>
+      <p><strong>Email:</strong> {{ order.email }}</p>
+      <p><strong>Phone:</strong> {{ order.phone }}</p>
+      <p><strong>Address:</strong> {{ order.address }}, {{ order.city }}, {{ order.country }}</p>
+    </div>
+
+    <!-- Order Items -->
+    <div class="bg-white p-5 md:p-6 rounded-lg shadow hover:shadow-md transition">
+      <h3 class="text-lg md:text-xl font-semibold mb-3">📦 Order Items</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="border-b bg-blue-50">
+              <th class="py-2 px-2">Product</th>
+              <th class="py-2 px-2">Quantity</th>
+              <th class="py-2 px-2">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in order.cart_items %}
+            <tr class="border-b">
+              <td class="py-2 px-2">{{ item.name }}</td>
+              <td class="py-2 px-2">{{ item.quantity }}</td>
+              <td class="py-2 px-2">Rs {{ item.price }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="text-lg font-bold mt-4">Total: Rs {{ order.total }}</p>
+    </div>
+
+    <!-- Order Status -->
+    <div class="bg-white p-5 md:p-6 rounded-lg shadow hover:shadow-md transition space-y-5">
+      <h3 class="text-lg md:text-xl font-semibold">🚦 Order Status</h3>
+
+      <div class="flex flex-wrap gap-3">
+        <select id="status-select" class="border border-gray-300 rounded px-4 py-2 w-full md:w-48">
+          <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+          <option value="In Progress" {% if order.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+          <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
+          <option value="Paid" {% if order.status == 'Paid' %}selected{% endif %}>Paid</option>
+          <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+        </select>
+
+        <button onclick="updateStatus()" class="bg-black text-white rounded px-4 py-2 hover:bg-gray-800 w-full md:w-auto">Update Status</button>
+      </div>
+
+      <button onclick="cancelOrder()" class="bg-red-600 text-white rounded px-4 py-2 hover:bg-red-700 w-full md:w-auto">❌ Cancel Order</button>
+
+      <p id="status-message" class="text-green-600 font-semibold hidden">Status updated successfully!</p>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- Mobile Sticky Navbar -->
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t flex md:hidden justify-around p-2 shadow">
+  <a href="/admin-dashboard" class="flex flex-col items-center text-xs text-gray-700">📊<span>Dashboard</span></a>
+  <a href="/admin/orders" class="flex flex-col items-center text-xs text-blue-600">📑<span>Orders</span></a>
+  <a href="/customer-reviews" class="flex flex-col items-center text-xs text-gray-700">⭐<span>Reviews</span></a>
+  <a href="/" class="flex flex-col items-center text-xs text-green-600">🏬<span>Store</span></a>
+</div>
+
+<script>
+  function updateStatus() {
+    const newStatus = document.getElementById('status-select').value;
+    fetch('/admin/order/{{ order.id }}/update-status', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ status: newStatus })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        const msg = document.getElementById('status-message');
+        msg.classList.remove('hidden');
+        msg.textContent = "Order status updated to " + newStatus + "!";
+      }
+    });
+  }
+
+  function cancelOrder() {
+    if (!confirm('Cancel this order? This cannot be undone.')) return;
+    fetch('/admin/order/{{ order.id }}/cancel', { method: 'POST' })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById('status-message').classList.remove('hidden');
+        document.getElementById('status-message').textContent = "Order cancelled.";
+        document.getElementById('status-select').value = "Cancelled";
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

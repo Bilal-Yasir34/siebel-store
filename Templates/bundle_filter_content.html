@@ -1,0 +1,43 @@
+<form method="GET" action="/bundle-deals">
+  <!-- Product Type Filters -->
+  <div class="mb-6">
+    <h3 class="font-medium mb-2">Product Type</h3>
+    <div class="space-y-2 text-sm">
+      <label class="flex items-center gap-2">
+        <input type="checkbox" name="type" value="RapiWhite" class="form-checkbox text-pink-500">
+        Whitening Bundles
+      </label>
+      <label class="flex items-center gap-2">
+        <input type="checkbox" name="type" value="AcneStop" class="form-checkbox text-pink-500">
+        Acne Bundles
+      </label>
+      <label class="flex items-center gap-2">
+        <input type="checkbox" name="type" value="Face Care" class="form-checkbox text-pink-500">
+        Face Care Bundles
+      </label>
+      <label class="flex items-center gap-2">
+        <input type="checkbox" name="type" value="Ultimate" class="form-checkbox text-pink-500">
+        Ultimate Bundles
+      </label>
+      <!-- Add other relevant bundle categories if needed -->
+    </div>
+  </div>
+
+  <!-- Price Range -->
+  <div class="mb-6">
+    <h3 class="font-medium mb-2">Price Range (Rs)</h3>
+    <div class="flex justify-between text-sm mb-2">
+      <span id="minPriceLabel">500</span>
+      <span id="maxPriceLabel">5000</span>
+    </div>
+    <div class="relative h-2 bg-gray-300 rounded mb-4">
+      <input type="range" name="min_price" min="500" max="5000" value="500" id="minPrice" class="absolute w-full opacity-0 h-2 z-20 cursor-pointer" step="100" oninput="updatePriceLabels()">
+      <input type="range" name="max_price" min="500" max="5000" value="5000" id="maxPrice" class="absolute w-full opacity-0 h-2 z-20 cursor-pointer" step="100" oninput="updatePriceLabels()">
+      <div id="rangeTrack" class="absolute h-2 bg-pink-400 rounded left-0 right-0"></div>
+    </div>
+  </div>
+
+  <button type="submit" class="w-full bg-pink-500 text-white py-2 rounded-full hover:bg-pink-600 transition">
+    Apply Filters
+  </button>
+</form>

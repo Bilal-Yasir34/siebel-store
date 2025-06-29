@@ -1,0 +1,106 @@
+[
+  {
+    "email": "bilalyasir34@gmail.com",
+    "phone": "03467555698",
+    "name": "Bilal Yasir",
+    "address": "Shadman Colony, Rehman Shaheed Road, Gujrat",
+    "city": "Gujrat",
+    "state": "",
+    "postal_code": "50700",
+    "country": "Pakistan",
+    "payment_method": "cod",
+    "note": "",
+    "cart_items": [
+      {
+        "before_price": 1700,
+        "id": 2,
+        "image": "images/AcneStop-FW.jpeg",
+        "name": "AcneStop Face Wash",
+        "price": 1499,
+        "quantity": 1
+      }
+    ],
+    "total": 1499,
+    "date": "2025-06-29 00:28",
+    "id": "8cc39d25-a2f1-4506-b695-0a0ce4171e01",
+    "status": "Cancelled"
+  },
+  {
+    "email": "bilalyasir34@gmail.com",
+    "phone": "03467555698",
+    "name": "Bilal Yasir",
+    "address": "Shadman Colony, Rehman Shaheed Road, Gujrat",
+    "city": "Gujrat",
+    "state": "",
+    "postal_code": "50700",
+    "country": "Pakistan",
+    "payment_method": "cod",
+    "note": "",
+    "cart_items": [
+      {
+        "before_price": 1700,
+        "id": 2,
+        "image": "images/AcneStop-FW.jpeg",
+        "name": "AcneStop Face Wash",
+        "price": 1499,
+        "quantity": 1
+      }
+    ],
+    "total": 1499,
+    "date": "2025-06-29 03:03",
+    "id": "d83ea8ff-d0be-4367-abcd-655a6479a972",
+    "status": "Cancelled"
+  },
+  {
+    "email": "bilalyasir34@gmail.com",
+    "phone": "3467555698",
+    "name": "Bilal Yasir",
+    "address": "Shadman Colony, Near Masjid e Tayyaba",
+    "city": "Gujrat",
+    "state": "",
+    "postal_code": "50700",
+    "country": "Pakistan",
+    "payment_method": "cod",
+    "note": "Pls deliver it fast!",
+    "cart_items": [
+      {
+        "before_price": 2500,
+        "id": 1,
+        "image": "images/RapiWhite-Serum1.jpeg",
+        "name": "RapiWhite Serum",
+        "price": 2250,
+        "quantity": 1
+      }
+    ],
+    "total": 2250,
+    "date": "2025-06-29 16:26",
+    "id": "058b6973-0f48-4e09-a159-79d0cf19b7da",
+    "status": "Pending"
+  },
+  {
+    "email": "bilalyasir34@gmail.com",
+    "phone": "03467555698",
+    "name": "Bilal Yasir",
+    "address": "Shadman Colony, Rehman Shaheed Road, Gujrat",
+    "city": "Gujrat",
+    "state": "",
+    "postal_code": "50700",
+    "country": "Pakistan",
+    "payment_method": "cod",
+    "note": "",
+    "cart_items": [
+      {
+        "before_price": 1750,
+        "id": 1,
+        "image": "images/RapiWhite-Serum.jpg",
+        "name": "RapiWhite Serum",
+        "price": 1599,
+        "quantity": 1
+      }
+    ],
+    "total": 1599,
+    "date": "2025-06-30 00:32",
+    "id": "c03017bc-aac4-4e54-b4b2-65be5d59226e",
+    "status": "Cancelled"
+  }
+]

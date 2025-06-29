@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Siebel Admin Orders</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+<div class="md:flex min-h-screen">
+
+  <!-- Desktop Sidebar -->
+  <aside class="hidden md:block w-60 bg-white shadow h-screen p-4">
+    <h1 class="text-2xl font-bold mb-6 text-blue-600">Siebel Admin</h1>
+    <nav class="space-y-4">
+      <a href="/admin-dashboard" class="block p-2 rounded hover:bg-blue-50">📊 Dashboard</a>
+      <a href="/admin/orders" class="block p-2 rounded bg-blue-50 font-semibold">📑 Orders</a>
+      <a href="/customer-reviews" class="block p-2 rounded hover:bg-blue-50">⭐ Customer Reviews</a>
+      <a href="/" class="block p-2 rounded text-green-600 hover:bg-green-50">🏬 Visit Store</a>
+      <a href="/admin-logout" class="block p-2 rounded text-red-600 hover:bg-red-50">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <main class="flex-1 p-4 md:p-8">
+    <h2 class="text-3xl font-bold mb-6 flex items-center">📑 Orders</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full bg-white rounded shadow">
+        <thead>
+          <tr class="bg-blue-50 text-left text-sm">
+            <th class="px-4 py-2">Order ID</th>
+            <th class="px-4 py-2">Customer</th>
+            <th class="px-4 py-2">Total</th>
+            <th class="px-4 py-2">Status</th>
+            <th class="px-4 py-2">Date</th>
+            <th class="px-4 py-2">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr class="border-t text-sm">
+            <td class="px-4 py-2">{{ order.id }}</td>
+            <td class="px-4 py-2">{{ order.name }}</td>
+            <td class="px-4 py-2">Rs. {{ order.total }}</td>
+            <td class="px-4 py-2">{{ order.status }}</td>
+            <td class="px-4 py-2">{{ order.date }}</td>
+            <td class="px-4 py-2">
+              <a href="/admin/order/{{ order.id }}" class="text-blue-600 hover:underline">View</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+</div>
+
+<!-- Mobile Sticky Navbar -->
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t flex md:hidden justify-around p-2 shadow">
+  <a href="/admin-dashboard" class="flex flex-col items-center text-xs text-gray-700">📊<span>Dashboard</span></a>
+  <a href="/admin/orders" class="flex flex-col items-center text-xs text-blue-600">📑<span>Orders</span></a>
+  <a href="/customer-reviews" class="flex flex-col items-center text-xs text-gray-700">⭐<span>Reviews</span></a>
+  <a href="/" class="flex flex-col items-center text-xs text-green-600">🏬<span>Store</span></a>
+</div>
+
+</body>
+</html>

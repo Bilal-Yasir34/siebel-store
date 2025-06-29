@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="bg-gray-100 py-4 border-b border-gray-300">
+  <h1 class="text-center text-2xl font-bold text-gray-800">Vitamin C Products</h1>
+</div>
+
+<div class="flex flex-col md:flex-row md:gap-6 md:px-8 px-4 py-6">
+
+  <!-- Filters Sidebar (Desktop Only) -->
+  <aside class="hidden md:block md:w-1/4 mb-6 md:mb-0 bg-gray-50 p-4 rounded shadow">
+    <h2 class="text-lg font-bold mb-4">Filter Products</h2>
+
+    {% include "filter_content.html" %}
+  </aside>
+
+  <!-- Main Product Section -->
+  <div class="flex-1">
+
+    <!-- Mobile Filter Button -->
+    <div class="flex justify-start mb-4 md:hidden">
+      <button onclick="toggleMobileFilters()" class="flex items-center gap-2 text-gray-700 border border-gray-300 px-3 py-2 rounded hover:bg-gray-100 transition">
+        <img src="{{ url_for('static', filename='images/filter.png') }}" alt="Filter" class="h-4 w-4">
+        <span class="text-sm font-medium">Filter</span>
+      </button>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for product in products %}
+      <div class="border rounded-lg overflow-hidden shadow hover:shadow-lg transition bg-white">
+        <a href="/product/{{ product.id }}">
+          <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" class="w-full h-56 object-cover">
+        </a>
+        <div class="p-4">
+          <h2 class="text-lg font-semibold mb-1">{{ product.name }}</h2>
+          <div class="text-black-400 text-sm mb-1">★★★★★ ({{ product.rating }}) {{ product.reviews }} Reviews</div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-gray-500 line-through text-sm">Rs {{ product.before_price }}</span>
+            <span class="text-pink-600 font-bold text-lg">Rs {{ product.price }}</span>
+          </div>
+          <button onclick="addToCart({{ product.id }}, 1)" class="w-full bg-pink-400 text-white py-2 rounded-full flex items-center justify-center gap-2 hover:bg-pink-600 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2m10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2M7.16 14.26l.03.02c.28.19.61.28.94.28H17v-2H9.42l-.93-4H18v-2H7.1l-.59-2H2v2h2.18l3.6 7.59-.62 1.16c-.16.29-.16.63 0 .92.16.3.44.51.77.59z"/>
+            </svg>
+            Add to Cart
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Filter Panel -->
+<div id="mobileFilters" class="fixed top-0 left-0 w-72 h-full bg-gray-50 shadow-lg transform -translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+  <div class="p-4 border-b flex items-center justify-between">
+    <h2 class="text-lg font-bold">Filter Products</h2>
+    <button onclick="toggleMobileFilters()" class="text-2xl">&times;</button>
+  </div>
+
+  <div class="p-4">
+    {% include "filter_content.html" %}
+  </div>
+</div>
+
+<script>
+  function toggleMobileFilters() {
+    const panel = document.getElementById('mobileFilters');
+    panel.classList.toggle('-translate-x-full');
+  }
+
+  function updatePriceLabels() {
+    const minSlider = document.getElementById('minPrice');
+    const maxSlider = document.getElementById('maxPrice');
+    const minLabel = document.getElementById('minPriceLabel');
+    const maxLabel = document.getElementById('maxPriceLabel');
+    const rangeTrack = document.getElementById('rangeTrack');
+
+    let minVal = parseInt(minSlider.value);
+    let maxVal = parseInt(maxSlider.value);
+
+    if (minVal > maxVal - 500) {
+      minVal = maxVal - 500;
+      minSlider.value = minVal;
+    }
+    if (maxVal < minVal + 500) {
+      maxVal = minVal + 500;
+      maxSlider.value = maxVal;
+    }
+
+    minLabel.textContent = minVal;
+    maxLabel.textContent = maxVal;
+
+    const rangeWidth = maxSlider.max - minSlider.min;
+    const minPercent = ((minVal - minSlider.min) / rangeWidth) * 100;
+    const maxPercent = ((maxVal - minSlider.min) / rangeWidth) * 100;
+
+    rangeTrack.style.left = `${minPercent}%`;
+    rangeTrack.style.right = `${100 - maxPercent}%`;
+  }
+
+  updatePriceLabels();
+</script>
+
+{% endblock %}

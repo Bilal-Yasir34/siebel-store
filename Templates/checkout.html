@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="px-4 md:px-8 py-8 max-w-6xl mx-auto">
+
+  <h1 class="text-3xl font-bold mb-6">Checkout</h1>
+
+  <form action="/checkout" method="POST">
+    <div class="grid md:grid-cols-3 gap-8">
+
+      <!-- Contact & Shipping -->
+      <div class="md:col-span-2 space-y-6">
+
+        <!-- Contact Information -->
+        <div class="space-y-2">
+          <h2 class="text-xl font-semibold">Contact Information</h2>
+          <input type="email" name="email" placeholder="Email Address" required 
+                 class="w-full border px-4 py-2 rounded focus:outline-none" 
+                 value="{{ user_data.contact_info.email if user_data and user_data.contact_info.email }}">
+          <input type="text" name="phone" placeholder="Phone Number" required 
+                 class="w-full border px-4 py-2 rounded focus:outline-none"
+                 value="{{ user_data.contact_info.phone if user_data and user_data.contact_info.phone }}">
+        </div>
+
+        <!-- Shipping Address -->
+        <div class="space-y-2">
+          <h2 class="text-xl font-semibold">Shipping Address</h2>
+          <input type="text" name="name" placeholder="Full Name" required 
+                 class="w-full border px-4 py-2 rounded focus:outline-none"
+                 value="{{ user_data.shipping_info.name if user_data and user_data.shipping_info.name }}">
+          <input type="text" name="address" placeholder="Street Address" required 
+                 class="w-full border px-4 py-2 rounded focus:outline-none"
+                 value="{{ user_data.shipping_info.address if user_data and user_data.shipping_info.address }}">
+          <input type="text" name="city" placeholder="City" required 
+                 class="w-full border px-4 py-2 rounded focus:outline-none"
+                 value="{{ user_data.shipping_info.city if user_data and user_data.shipping_info.city }}">
+          <div class="flex gap-3">
+            <input type="text" name="state" placeholder="State"
+                   class="w-1/2 border px-4 py-2 rounded focus:outline-none"
+                   value="{{ user_data.shipping_info.state if user_data and user_data.shipping_info.state }}">
+            <input type="text" name="postal_code" placeholder="Postal Code" required
+                   class="w-1/2 border px-4 py-2 rounded focus:outline-none"
+                   value="{{ user_data.shipping_info.postal_code if user_data and user_data.shipping_info.postal_code }}">
+          </div>
+          <input type="text" name="country" placeholder="Country" required 
+                 class="w-full border px-4 py-2 rounded focus:outline-none"
+                 value="{{ user_data.shipping_info.country if user_data and user_data.shipping_info.country }}">
+        </div>
+
+        <!-- Payment Method -->
+        <div>
+          <h2 class="text-xl font-semibold mb-2">Payment Method</h2>
+          <div class="space-y-3">
+            <label class="flex items-center gap-2">
+              <input type="radio" name="payment_method" value="cod" checked required>
+              Cash on Delivery
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="radio" name="payment_method" value="card" required>
+              Credit / Debit Card
+            </label>
+
+            <div id="cardFields" class="hidden space-y-2 mt-2">
+              <input type="text" name="card_name" placeholder="Name on Card" class="w-full border px-4 py-2 rounded focus:outline-none card-required">
+              <input type="text" name="card_number" placeholder="Card Number" class="w-full border px-4 py-2 rounded focus:outline-none card-required">
+              <div class="flex gap-3">
+                <input type="text" name="card_expiry" placeholder="Expiry Date" class="w-1/2 border px-4 py-2 rounded focus:outline-none card-required">
+                <input type="text" name="card_cvv" placeholder="CVV" class="w-1/2 border px-4 py-2 rounded focus:outline-none card-required">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Optional Note -->
+        <div>
+          <h2 class="text-xl font-semibold mb-2">Add a Note (Optional)</h2>
+          <textarea name="note" placeholder="Any delivery instructions or notes" class="w-full border px-4 py-2 rounded focus:outline-none h-24"></textarea>
+        </div>
+
+        <!-- Terms Checkbox -->
+        <div>
+          <label class="flex items-center gap-2">
+            <input type="checkbox" name="terms" required>
+            I agree to the <a href="/terms-of-service" class="underline text-pink-500">terms and conditions</a>.
+          </label>
+        </div>
+
+      </div>
+
+      <!-- Order Summary -->
+      <div class="space-y-6">
+        <div class="border p-4 rounded-lg bg-gray-50">
+          <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+          <div class="space-y-3">
+            {% for item in cart_items %}
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-medium">{{ item.name }}</p>
+                <small>Qty: {{ item.quantity }}</small>
+              </div>
+              <p>Rs. {{ item.price * item.quantity }}</p>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="border-t mt-4 pt-4 flex justify-between font-semibold">
+            <span>Subtotal:</span>
+            <span>Rs. {{ subtotal }}</span>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-black text-white font-semibold rounded-full hover:bg-pink-300 hover:text-black transition">Place Order</button>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+<!-- Card Payment Toggle Script -->
+<script>
+  const cardFields = document.getElementById('cardFields');
+  const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
+
+  paymentRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      const isCard = document.querySelector('input[name="payment_method"]:checked').value === 'card';
+      cardFields.classList.toggle('hidden', !isCard);
+
+      const cardInputs = document.querySelectorAll('.card-required');
+      cardInputs.forEach(input => {
+        input.required = isCard;
+      });
+    });
+  });
+</script>
+{% endblock %}
