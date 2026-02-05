@@ -1,4 +1,12 @@
 {% extends "base.html" %}
+{% set title = "Buy Best Anti-Itching Bars in Pakistan | Siebel Skincare" %}
+{% set description = "Shop original Anti-Itching Soap Bars in Pakistan for instant itch relief. Nationwide delivery, cash on delivery, and best prices on Scab Ban, SkinTar & more." %}
+{% set keywords = "anti itching bar, anti itching soap Pakistan, skin itching soap, scab ban price Pakistan, skintar bar, allergy soap Pakistan" %}
+{% set canonical = "https://www.siebel.store/category/anti-itching" %}
+{% set og_title = title %}
+{% set og_description = description %}
+{% set og_image = "https://www.siebel.store/static/images/anti_itching_ctg.jpg" %}
+{% set og_url = canonical %}
 {% block content %}
 
 <div class="bg-gray-100 py-4 border-b border-gray-300">
@@ -28,7 +36,7 @@
     <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for product in products %}
       <div class="border rounded-lg overflow-hidden shadow hover:shadow-lg transition bg-white">
-        <a href="/product/{{ product.id }}">
+        <a href="/product/{{ product.slug }}">
           <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" class="w-full h-56 object-cover">
         </a>
         <div class="p-4">

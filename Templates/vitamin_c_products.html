@@ -1,5 +1,14 @@
 {% extends "base.html" %}
+{% set title = "Buy Best Vitamin C Skincare Products in Pakistan | Siebel Skincare" %}
+{% set description = "Shop authentic Vitamin C serums, creams, face washes, and skincare products in Pakistan. Brighten, hydrate, and protect your skin with our dermatologist-approved formulas." %}
+{% set keywords = "vitamin C serum Pakistan, vitamin C cream, whitening vitamin C products, best vitamin C serum Pakistan, glutathione serum, vitamin C facewash" %}
+{% set canonical = "https://www.siebel.store/vitamin-c-products" %}
+{% set og_title = title %}
+{% set og_description = description %}
+{% set og_image = "https://www.siebel.store/static/images/rapiwhite-serum.jpg" %}
+{% set og_url = canonical %}
 {% block content %}
+
 
 <!-- Breadcrumb -->
 <div class="bg-gray-100 py-4 border-b border-gray-300">
@@ -30,7 +39,7 @@
     <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for product in products %}
       <div class="border rounded-lg overflow-hidden shadow hover:shadow-lg transition bg-white">
-        <a href="/product/{{ product.id }}">
+        <a href="/product/{{ product.slug }}">
           <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" class="w-full h-56 object-cover">
         </a>
         <div class="p-4">

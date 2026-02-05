@@ -54,18 +54,19 @@
               <input type="radio" name="payment_method" value="cod" checked required>
               Cash on Delivery
             </label>
-            <label class="flex items-center gap-2">
-              <input type="radio" name="payment_method" value="card" required>
-              Credit / Debit Card
+            <label class="flex items-center gap-2 opacity-50 cursor-not-allowed">
+              <input type="radio" name="payment_method" value="card" disabled>
+              Credit / Debit Card (Coming Soon)
             </label>
+          </div>
 
-            <div id="cardFields" class="hidden space-y-2 mt-2">
-              <input type="text" name="card_name" placeholder="Name on Card" class="w-full border px-4 py-2 rounded focus:outline-none card-required">
-              <input type="text" name="card_number" placeholder="Card Number" class="w-full border px-4 py-2 rounded focus:outline-none card-required">
-              <div class="flex gap-3">
-                <input type="text" name="card_expiry" placeholder="Expiry Date" class="w-1/2 border px-4 py-2 rounded focus:outline-none card-required">
-                <input type="text" name="card_cvv" placeholder="CVV" class="w-1/2 border px-4 py-2 rounded focus:outline-none card-required">
-              </div>
+          <!-- Card Payment Fields (hidden & inactive for now) -->
+          <div id="cardFields" class="hidden space-y-2 mt-2">
+            <input type="text" name="card_name" placeholder="Name on Card" class="w-full border px-4 py-2 rounded focus:outline-none card-required">
+            <input type="text" name="card_number" placeholder="Card Number" class="w-full border px-4 py-2 rounded focus:outline-none card-required">
+            <div class="flex gap-3">
+              <input type="text" name="card_expiry" placeholder="Expiry Date" class="w-1/2 border px-4 py-2 rounded focus:outline-none card-required">
+              <input type="text" name="card_cvv" placeholder="CVV" class="w-1/2 border px-4 py-2 rounded focus:outline-none card-required">
             </div>
           </div>
         </div>
@@ -101,10 +102,31 @@
             </div>
             {% endfor %}
           </div>
+
+          <!-- Subtotal -->
           <div class="border-t mt-4 pt-4 flex justify-between font-semibold">
             <span>Subtotal:</span>
             <span>Rs. {{ subtotal }}</span>
           </div>
+
+          <!-- Shipping -->
+          <div class="flex justify-between font-semibold">
+            <span>Shipping:</span>
+            <span>
+              {% if shipping == 0 %}
+                Free
+              {% else %}
+                Rs. {{ shipping }}
+              {% endif %}
+            </span>
+          </div>
+
+          <!-- Total -->
+          <div class="flex justify-between font-bold text-lg">
+            <span>Total:</span>
+            <span>Rs. {{ total }}</span>
+          </div>
+
         </div>
 
         <button type="submit" class="w-full py-3 bg-black text-white font-semibold rounded-full hover:bg-pink-300 hover:text-black transition">Place Order</button>
@@ -113,22 +135,4 @@
     </div>
   </form>
 </div>
-
-<!-- Card Payment Toggle Script -->
-<script>
-  const cardFields = document.getElementById('cardFields');
-  const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
-
-  paymentRadios.forEach(radio => {
-    radio.addEventListener('change', () => {
-      const isCard = document.querySelector('input[name="payment_method"]:checked').value === 'card';
-      cardFields.classList.toggle('hidden', !isCard);
-
-      const cardInputs = document.querySelectorAll('.card-required');
-      cardInputs.forEach(input => {
-        input.required = isCard;
-      });
-    });
-  });
-</script>
 {% endblock %}

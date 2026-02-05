@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin
+Disallow: /admin-login
+Disallow: /checkout
+Disallow: /cart
+Allow: /
+
+Sitemap: https://www.siebel.store/sitemap.xml

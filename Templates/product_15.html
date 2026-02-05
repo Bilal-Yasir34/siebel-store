@@ -1,5 +1,14 @@
 {% extends "base.html" %}
+{% set title = "AcneStop Bundle | Anti-Acne Skincare Set in Pakistan" %}
+{% set description = "Control breakouts and reduce acne marks with the AcneStop Bundle — featuring a gentle face wash and powerful serum for clearer, smoother skin in Pakistan." %}
+{% set keywords = "AcneStop Bundle, acne skincare set Pakistan, anti acne products, AcneStop face wash, AcneStop serum, acne control kit, acne marks treatment Pakistan" %}
+{% set canonical = "https://www.siebel.store/product/" ~ product.slug %}
+{% set og_title = title %}
+{% set og_description = description %}
+{% set og_image = "https://www.siebel.store/static/images/acnestop_bundle.jpg" %}
+{% set og_url = canonical %}
 {% block content %}
+
 <div class="text-xs text-gray-500 flex items-left gap-2 bg-gray-100 py-4 mb-2 md:px-8 px-4">
   <a href="/" class="hover:text-pink-500">Home</a>
   <span>&gt;</span>
@@ -17,7 +26,7 @@
   <div class="absolute top-2 right-2 bg-pink-500 text-white text-xs font-semibold px-3 py-1 border radius 50 border-transparent z-10 shadow">
     {{ ((product.before_price - product.price) / product.before_price * 100) | round(0) | int }}% OFF
   </div>
-    <img src="{{ url_for('static', filename='images/AcneStop_Bundle.jpg') }}" alt="AcneStop Bundle" class="rounded-lg shadow w-full object-cover">
+    <img src="{{ url_for('static', filename='images/acnestop_bundle.jpg') }}" alt="AcneStop Bundle" class="rounded-lg shadow w-full object-cover">
   </div>
 
   <div class="w-full md:w-1/2 flex flex-col">
@@ -71,14 +80,18 @@
   <div class="mt-6">
     <h3 class="text-lg font-semibold mb-2">Description</h3>
     <p class="text-gray-600 leading-relaxed">
-        Scab Ban is a gentle anti-itching cleansing bar designed to soothe irritated, itchy skin and calm rashes. Formulated with natural ingredients, it provides quick relief while maintaining skin softness.
-        <br><strong>Ingredients:</strong> Tea Tree Oil, Calamine, Aloe Vera
+        Say goodbye to stubborn breakouts and hello to clear, healthy skin with the AcneStop Bundle. Specially formulated to combat acne, control excess oil, and soothe irritated skin, this two-step skincare combo is your daily defense against pimples, blackheads, and blemishes.
+        <br><strong>AcneStop Face Wash </strong>gently cleanses deep within the pores, removing dirt, oil, and impurities without stripping your skin’s natural moisture.
+        <br><strong>AcneStop Serum </strong>targets active acne, reduces inflammation, and helps fade acne marks, promoting smoother, clearer skin with consistent use.
       </p>
   </div>
   <div class="mt-6">
-      <h3 class="text-lg font-semibold mb-2">Directions for Use</h3>
+      <h3 class="text-lg font-semibold mb-2">📦 What’s Inside the Box:</h3>
       <p class="text-gray-600 leading-relaxed">
-        Wet the affected area and lather the bar onto your skin. Leave on for a minute before rinsing. Use twice daily for best results. Avoid contact with eyes and open wounds.
+        1 x AcneStop Face Wash (100ml)
+      </p>
+      <p class="text-gray-600 leading-relaxed">
+        1 x AcneStop Serum (30ml)
       </p>
     </div>
 
@@ -115,7 +128,7 @@
     {% for rec in recommendations %}
     <div class="arrival-card relative">
       <div class="image-wrap relative">
-        <a href="/product/{{ rec.id }}">
+        <a href="/product/{{ rec.slug }}">
           <img src="{{ url_for('static', filename=rec.image) }}" alt="{{ rec.name }}">
         </a>
 
@@ -148,7 +161,7 @@
 
 
       </div>
-      <h3><a href="/product/{{ rec.id }}">{{ rec.name }}</a></h3>
+      <h3><a href="/product/{{ rec.slug }}">{{ rec.name }}</a></h3>
       <div class="rating">★★★★★ <span>({{ rec.rating }})</span> <small>{{ rec.reviews }} Reviews</small></div>
       <p>
         <span class="text-gray-500 line-through mr-2">Rs. {{ rec.before_price }}</span>

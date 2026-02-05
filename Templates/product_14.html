@@ -1,5 +1,14 @@
 {% extends "base.html" %}
+{% set title = "RapiWhite Bundle | Complete Skin Brightening Set in Pakistan" %}
+{% set description = "Get the ultimate skin brightening solution with RapiWhite Bundle — including Face Wash, Serum, and Cream for visibly brighter, even-toned, and healthier skin." %}
+{% set keywords = "RapiWhite Bundle, skin brightening bundle, skincare set Pakistan, RapiWhite Face Wash Serum Cream, skin whitening kit, skin glow products Pakistan" %}
+{% set canonical = "https://www.siebel.store/product/" ~ product.slug %}
+{% set og_title = title %}
+{% set og_description = description %}
+{% set og_image = "https://www.siebel.store/static/images/rapiwhite_bundle.jpg" %}
+{% set og_url = canonical %}
 {% block content %}
+
 <div class="text-xs text-gray-500 flex items-left gap-2 bg-gray-100 py-4 mb-2 md:px-8 px-4">
   <a href="/" class="hover:text-pink-500">Home</a>
   <span>&gt;</span>
@@ -17,7 +26,7 @@
   <div class="absolute top-2 right-2 bg-pink-500 text-white text-xs font-semibold px-3 py-1 border radius 50 border-transparent z-10 shadow">
     {{ ((product.before_price - product.price) / product.before_price * 100) | round(0) | int }}% OFF
   </div>
-    <img src="{{ url_for('static', filename='images/RapiWhite_Bundle.jpg') }}" alt="RapiWhite Bundle" class="rounded-lg shadow w-full object-cover">
+    <img src="{{ url_for('static', filename='images/rapiwhite_bundle.jpg') }}" alt="RapiWhite Bundle" class="rounded-lg shadow w-full object-cover">
   </div>
 
   <div class="w-full md:w-1/2 flex flex-col">
@@ -71,14 +80,21 @@
   <div class="mt-6">
     <h3 class="text-lg font-semibold mb-2">Description</h3>
     <p class="text-gray-600 leading-relaxed">
-        Scab Ban is a gentle anti-itching cleansing bar designed to soothe irritated, itchy skin and calm rashes. Formulated with natural ingredients, it provides quick relief while maintaining skin softness.
-        <br><strong>Ingredients:</strong> Tea Tree Oil, Calamine, Aloe Vera
+        Achieve visibly brighter, healthier, and radiant skin with the RapiWhite Bundle — a complete skincare solution designed to target dullness, uneven skin tone, and pigmentation. This powerful trio works together to cleanse, nourish, and rejuvenate your skin, revealing a smoother and more luminous complexion. Whether you’re starting your brightening journey or enhancing your current routine, this bundle delivers everything you need for daily skin confidence.
+        <br><strong>RapiWhite Face Wash </strong>gently removes impurities, excess oil, and makeup while refreshing your skin without over-drying.
+        <br><strong>RapiWhite Serum </strong>deeply penetrates to target dark spots, discoloration, and uneven skin tone with advanced brightening actives.
+        <br><strong>RapiWhite Cream </strong>locks in moisture, improves skin texture, and supports a visibly fairer, youthful appearance.
       </p>
   </div>
   <div class="mt-6">
-      <h3 class="text-lg font-semibold mb-2">Directions for Use</h3>
+      <h3 class="text-lg font-semibold mb-2">📦 What’s Inside the Box:</h3>
       <p class="text-gray-600 leading-relaxed">
-        Wet the affected area and lather the bar onto your skin. Leave on for a minute before rinsing. Use twice daily for best results. Avoid contact with eyes and open wounds.
+        1 x RapiWhite Face Wash (100ml)
+        <p class="text-gray-600 leading-relaxed">
+1 x RapiWhite Serum
+</p>
+<p class="text-gray-600 leading-relaxed">
+1 x RapiWhite Cream
       </p>
     </div>
 
@@ -115,7 +131,7 @@
     {% for rec in recommendations %}
     <div class="arrival-card relative">
       <div class="image-wrap relative">
-        <a href="/product/{{ rec.id }}">
+        <a href="/product/{{ rec.slug }}">
           <img src="{{ url_for('static', filename=rec.image) }}" alt="{{ rec.name }}">
         </a>
 
@@ -148,7 +164,7 @@
 
 
       </div>
-      <h3><a href="/product/{{ rec.id }}">{{ rec.name }}</a></h3>
+      <h3><a href="/product/{{ rec.slug }}">{{ rec.name }}</a></h3>
       <div class="rating">★★★★★ <span>({{ rec.rating }})</span> <small>{{ rec.reviews }} Reviews</small></div>
       <p>
         <span class="text-gray-500 line-through mr-2">Rs. {{ rec.before_price }}</span>

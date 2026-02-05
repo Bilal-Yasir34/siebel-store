@@ -1,13 +1,21 @@
 {% extends "base.html" %}
-
+{% set title = "Siebel Skincare Pakistan | Best Whitening Serums, Sunblocks & Skincare" %}
+{% set description = "Shop Pakistan’s most trusted skincare products — from whitening serums, sunblocks, anti-itching soaps to face and body care. Fast nationwide delivery & 100% original products." %}
+{% set keywords = "skincare Pakistan, whitening serum, sunblock Pakistan, face wash Pakistan, anti itching bar, best skincare online store, siebel skincare official" %}
+{% set canonical = "https://www.siebel.store/" %}
+{% set og_title = title %}
+{% set og_description = description %}
+{% set og_image = "https://www.siebel.store/static/images/banner1.png" %}
+{% set og_url = canonical %}
 {% block content %}
+
 
 <!-- Image Gallery -->
 <section class="gallery relative overflow-hidden">
   <div id="galleryTrack" class="flex transition-transform duration-500 ease-in-out">
-    <img src="{{ url_for('static', filename='images/banner1.png') }}" alt="Banner 1" class="gallery-image">
-    <img src="{{ url_for('static', filename='images/banner2.png') }}" alt="Banner 2" class="gallery-image">
-    <img src="{{ url_for('static', filename='images/banner3.png') }}" alt="Banner 3" class="gallery-image">
+    <img src="{{ url_for('static', filename='images/bannerimage1.png') }}" alt="Banner 1" class="gallery-image">
+    <img src="{{ url_for('static', filename='images/bannerimage2.png') }}" alt="Banner 2" class="gallery-image">
+    <img src="{{ url_for('static', filename='images/bannerimage3.png') }}" alt="Banner 3" class="gallery-image">
   </div>
 </section>
 
@@ -25,8 +33,8 @@
       <div class="arrival-card relative">
         <div class="image-wrap relative">
           <div class="ribbon">% DISCOUNT</div>
-          <a href="/product/1">
-            <img src="{{ url_for('static', filename='images/RapiWhite-Serum.jpg') }}">
+          <a href="/product/rapiwhite-serum">
+            <img src="{{ url_for('static', filename='images/rapiwhite-serum.jpg') }}">
           </a>
 
           <!-- Mobile Cart Button -->
@@ -59,17 +67,17 @@
 
 
         </div>
-        <h3><a href="/product/1">RapiWhite Serum</a></h3>
+        <h3><a href="/product/rapiwhite-serum">RapiWhite Serum</a></h3>
         <div class="rating">★★★★★ <span>(4.9)</span> <small>17  Reviews</small></div>
-        <span class="old-price">Rs. 1,750</span>
-        <span class="new-price">Rs. 1,599</span>
+        <span class="old-price">Rs. 1,849</span>
+        <span class="new-price">Rs. 1,699</span>
       </div>
 
 <div class="arrival-card relative">
   <div class="image-wrap relative">
     <div class="ribbon">% DISCOUNT</div>
-    <a href="/product/2">
-      <img src="{{ url_for('static', filename='images/AcneStop-FaceWash.jpg') }}">
+    <a href="/product/acnestop-face-wash">
+      <img src="{{ url_for('static', filename='images/acnestop-facewash.jpg') }}">
     </a>
 
     <!-- Mobile Cart Button -->
@@ -99,7 +107,7 @@
   </div>
 </button>
   </div>
-  <h3><a href="/product/2">AcneStop Face Wash</a></h3>
+  <h3><a href="/product/acnestop-face-wash">AcneStop Face Wash</a></h3>
   <div class="rating">★★★★★ <span>(4.9)</span> <small>17 Reviews</small></div>
   <span class="old-price">Rs. 650</span>
   <span class="new-price">Rs. 550</span>
@@ -109,8 +117,8 @@
 <div class="arrival-card relative">
   <div class="image-wrap relative">
     <div class="ribbon">% DISCOUNT</div>
-    <a href="/product/3">
-      <img src="{{ url_for('static', filename='images/UvBan.jpg') }}">
+    <a href="/product/uv-ban-sunblock">
+      <img src="{{ url_for('static', filename='images/uvban.jpg') }}">
     </a>
     <!-- Mobile Cart Button -->
     <button onclick="addToCart(3, 1)" type="button" class="mobile-cart-button">
@@ -140,18 +148,18 @@
   </div>
 </button>
   </div>
-  <h3><a href="/product/3">UV Ban Sunblock</a></h3>
+  <h3><a href="/product/uv-ban-sunblock">UV Ban Sunblock</a></h3>
   <div class="rating">★★★★★ <span>(4.9)</span> <small>17 Reviews</small></div>
-  <span class="old-price">Rs. 595</span>
-  <span class="new-price">Rs. 560</span>
+  <span class="old-price">Rs. 695</span>
+  <span class="new-price">Rs. 595</span>
 </div>
 
 <!-- Product 4 -->
 <div class="arrival-card relative">
   <div class="image-wrap relative">
     <div class="ribbon">% DISCOUNT</div>
-    <a href="/product/4">
-      <img src="{{ url_for('static', filename='images/RapiWhite-Cream.jpg') }}">
+    <a href="/product/rapiwhite-cream">
+      <img src="{{ url_for('static', filename='images/rapiwhite-cream.jpg') }}">
     </a>
     <!-- Mobile Cart Button -->
     <button onclick="addToCart(4, 1)" type="button" class="mobile-cart-button">
@@ -180,18 +188,18 @@
   </div>
 </button>
   </div>
-  <h3><a href="/product/4">RapiWhite Cream</a></h3>
+  <h3><a href="/product/rapiwhite-cream">RapiWhite Cream</a></h3>
   <div class="rating">★★★★★ <span>(4.8)</span> <small>14</small></div>
   <span class="old-price">Rs. 1,295</span>
-  <span class="new-price">Rs. 1,150</span>
+  <span class="new-price">Rs. 1,149</span>
 </div>
 
 <!-- Product 5 -->
 <div class="arrival-card relative">
   <div class="image-wrap relative">
     <div class="ribbon">% DISCOUNT</div>
-    <a href="/product/5">
-      <img src="{{ url_for('static', filename='images/AcneStop-Serum.jpg') }}">
+    <a href="/product/acnestop-serum">
+      <img src="{{ url_for('static', filename='images/acnestop-serum.jpg') }}">
     </a>
     <!-- Mobile Cart Button -->
     <button onclick="addToCart(5, 1)" type="button" class="mobile-cart-button">
@@ -220,18 +228,18 @@
   </div>
 </button>
   </div>
-  <h3><a href="/product/5">AcneStop Serum</a></h3>
+  <h3><a href="/product/acnestop-serum">AcneStop Serum</a></h3>
   <div class="rating">★★★★★ <span>(4.7)</span> <small>12 Reviews</small></div>
-  <span class="old-price">Rs. 1,750</span>
-  <span class="new-price">Rs. 1,599</span>
+  <span class="old-price">Rs. 1,849</span>
+  <span class="new-price">Rs. 1,699</span>
 </div>
 
 <!-- Product 6 -->
 <div class="arrival-card relative">
   <div class="image-wrap relative">
     <div class="ribbon">% DISCOUNT</div>
-    <a href="/product/6">
-      <img src="{{ url_for('static', filename='images/OilRich-Lotion.jpg') }}">
+    <a href="/product/oilrich-body-lotion">
+      <img src="{{ url_for('static', filename='images/oilrich-lotion.jpg') }}">
     </a>
     <!-- Mobile Cart Button -->
     <button onclick="addToCart(6, 1)" type="button" class="mobile-cart-button">
@@ -260,10 +268,10 @@
   </div>
 </button>
   </div>
-  <h3><a href="/product/6">OilRich Lotion</a></h3>
+  <h3><a href="/product/oilrich-body-lotion">OilRich Lotion</a></h3>
   <div class="rating">★★★★★ <span>(5.0)</span> <small>20 Reviews</small></div>
-  <span class="old-price">Rs. 650</span>
-  <span class="new-price">Rs. 600</span>
+  <span class="old-price">Rs. 649</span>
+  <span class="new-price">Rs. 599</span>
 </div>
   </div>
 
@@ -275,48 +283,86 @@
 
 
     <!-- Categories Section -->
-  <section class="my-12 px-4 max-w-7xl mx-auto">
+<section class="my-12 px-4 max-w-7xl mx-auto">
   <h2 class="text-3xl font-bold mb-8 text-center">Shop by Category</h2>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    
-    <!-- Category 1 -->
-    <a href="/category/face-care" class="block overflow-hidden">
-      <img src="{{ url_for('static', filename='images/FaceCare_ctg.jpg') }}" alt="Face Care" class="w-full h-120 object-cover">
+  <div class="categories-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+    <!-- Face Care -->
+    <a href="/category/face-care" class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <img src="{{ url_for('static', filename='images/facecare_catg.png') }}" alt="Face Care">
+        </div>
+        <div class="flip-card-back">
+          <span>Face Care</span>
+        </div>
+      </div>
     </a>
 
-    <!-- Category 2 -->
-    <a href="/category/body-care" class="block overflow-hidden" title="View Body Care Products">
-  <img src="{{ url_for('static', filename='images/BodyCare_ctg.jpg') }}" alt="Body Care" class="w-full h-120 object-cover">
-</a>
+    <!-- Body Care -->
+    <a href="/category/body-care" class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <img src="{{ url_for('static', filename='images/bodycare_catg.png') }}" alt="Body Care">
+        </div>
+        <div class="flip-card-back">
+          <span>Body Care</span>
+        </div>
+      </div>
+    </a>
 
-    <!-- Category 3 -->
-    <a href="/category/sun-protection" class="block overflow-hidden">
-      <img src="{{ url_for('static', filename='images/SunProtection_ctg.jpg') }}" alt="Bundle Deals" class="w-full h-120 object-cover">
+    <!-- Sun Protection -->
+    <a href="/category/sun-protection" class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <img src="{{ url_for('static', filename='images/sunprotection_catg.png') }}" alt="Sun Protection">
+        </div>
+        <div class="flip-card-back">
+          <span>Sun Protection</span>
+        </div>
+      </div>
     </a>
-    <!-- Category 4 -->
-    <a href="/category/anti-itching" class="block overflow-hidden">
-      <img src="{{ url_for('static', filename='images/Anti_Itching_ctg.jpg') }}" alt="Body Care" class="w-full h-120 object-cover">
+
+    <!-- Anti Itching -->
+    <a href="/category/anti-itching" class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <img src="{{ url_for('static', filename='images/anti_itching_catg.png') }}" alt="Anti Itching">
+        </div>
+        <div class="flip-card-back">
+          <span>Anti-Itching</span>
+        </div>
+      </div>
     </a>
-    <!-- Category 5 -->
-    <a href="/bundle-deals" class="block overflow-hidden">
-      <img src="{{ url_for('static', filename='images/Bundles_ctg.jpg') }}" alt="Body Care" class="w-full h-120 object-cover">
+
+    <!-- Bundle Deals -->
+    <a href="/bundle-deals" class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <img src="{{ url_for('static', filename='images/bundles_catg.png') }}" alt="Bundle Deals">
+        </div>
+        <div class="flip-card-back">
+          <span>Bundle Deals</span>
+        </div>
+      </div>
     </a>
-    <!-- Category 6 -->
-    <a href="/category/hot-sellers" class="block overflow-hidden">
-      <img src="{{ url_for('static', filename='images/HotSellers_ctg.jpg') }}" alt="Body Care" class="w-full h-120 object-cover">
+
+    <!-- Hot Sellers -->
+    <a href="/category/hot-sellers" class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <img src="{{ url_for('static', filename='images/hotsellers_catg.png') }}" alt="Hot Sellers">
+        </div>
+        <div class="flip-card-back">
+          <span>Hot Sellers</span>
+        </div>
+      </div>
     </a>
 
   </div>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
-  {% for category in categories %}
-  <div class="bg-white shadow rounded p-4 text-center">
-    <h3 class="text-lg font-semibold">{{ category.name }}</h3>
-  </div>
-  {% endfor %}
-</div>
-
 </section>
+
 
 <!-- Best Sellers -->
 <section class="best-sellers mt-12">
@@ -327,12 +373,12 @@
     <div class="arrival-card relative">
       <div class="image-wrap relative">
         <div class="ribbon">% DISCOUNT</div>
-        <a href="/product/1">
-          <img src="{{ url_for('static', filename='images/RapiWhite-Serum.jpg') }}" alt="RapiWhite Serum">
+        <a href="/product/rapiwhite-serum">
+          <img src="{{ url_for('static', filename='images/rapiwhite-serum.jpg') }}" alt="RapiWhite Serum">
         </a>
 
         <!-- Mobile Cart Button -->
-    <button onclick="addToCart(6, 1)" type="button" class="mobile-cart-button">
+    <button onclick="addToCart(1, 1)" type="button" class="mobile-cart-button">
   <svg viewBox="0 0 24 24" width="22" height="22" fill="black">
     <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
       m10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2
@@ -343,7 +389,7 @@
 </button>
     <!-- Desktop Cart Button -->
 
-    <button onclick="addToCart(6, 1)" type="button" class="desktop-cart-button">
+    <button onclick="addToCart(1, 1)" type="button" class="desktop-cart-button">
   <div class="button-wrapper">
     <div class="text">Add to Cart</div>
     <span class="icon">
@@ -359,18 +405,18 @@
 </button>
 
       </div>
-      <h3><a href="/product/1">RapiWhite Serum</a></h3>
+      <h3><a href="/product/rapiwhite-serum">RapiWhite Serum</a></h3>
       <div class="rating">★★★★★ <span>(5.0)</span> <small>38 Reviews</small></div>
-      <span class="old-price">Rs. 1,750</span>
-      <span class="new-price">Rs. 1,599</span>
+      <span class="old-price">Rs. 1,849</span>
+      <span class="new-price">Rs. 1,699</span>
     </div>
 
     <!-- Product 2 -->
     <div class="arrival-card relative">
       <div class="image-wrap relative">
         <div class="ribbon">% DISCOUNT</div>
-        <a href="/product/9">
-          <img src="{{ url_for('static', filename='images/RapiWhite-FaceWash.jpg') }}" alt="RapiWhite FaceWash">
+        <a href="/product/rapiwhite-facewash">
+          <img src="{{ url_for('static', filename='images/rapiwhite-facewash.jpg') }}" alt="RapiWhite FaceWash">
         </a>
         <!-- Mobile Cart Button -->
     <button onclick="addToCart(9, 1)" type="button" class="mobile-cart-button">
@@ -399,7 +445,7 @@
   </div>
 </button>
       </div>
-      <h3><a href="/product/9">RapiWhite FaceWash</a></h3>
+      <h3><a href="/product/rapiwhite-facewash">RapiWhite FaceWash</a></h3>
       <div class="rating">★★★★★ <span>(4.1)</span> <small>24 Reviews</small></div>
       <span class="old-price">Rs. 999</span>
       <span class="new-price">Rs. 950</span>
@@ -409,8 +455,8 @@
     <div class="arrival-card">
       <div class="image-wrap relative">
         <div class="ribbon">% DISCOUNT</div>
-        <a href="/product/3">
-          <img src="{{ url_for('static', filename='images/UvBan.jpg') }}" alt="UV Ban Sunblock">
+        <a href="/product/uv-ban-sunblock">
+          <img src="{{ url_for('static', filename='images/uvban.jpg') }}" alt="UV Ban Sunblock">
         </a>
         <!-- Mobile Cart Button -->
     <button onclick="addToCart(3, 1)" type="button" class="mobile-cart-button">
@@ -439,18 +485,18 @@
   </div>
 </button>
       </div>
-      <h3><a href="/product/3">UV Ban Sunblock</a></h3>
+      <h3><a href="/product/uv-ban-sunblock">UV Ban Sunblock</a></h3>
       <div class="rating">★★★★★ <span>(4.8)</span> <small>33 Reviews</small></div>
-      <span class="old-price">Rs. 595</span>
-      <span class="new-price">Rs. 560</span>
+      <span class="old-price">Rs. 695</span>
+      <span class="new-price">Rs. 595</span>
     </div>
 
     <!-- Product 4 -->
     <div class="arrival-card">
       <div class="image-wrap relative">
         <div class="ribbon">% DISCOUNT</div>
-        <a href="/product/7">
-          <img src="{{ url_for('static', filename='images/RapiWhite-FullBwc.jpg') }}" alt="RapiWhite Full Body Lotion">
+        <a href="/product/rapiwhite-full-body-whitening-lotion">
+          <img src="{{ url_for('static', filename='images/rapiwhite-fullbwc.jpg') }}" alt="RapiWhite Full Body Lotion">
         </a>
         <!-- Mobile Cart Button -->
     <button onclick="addToCart(7, 1)" type="button" class="mobile-cart-button">
@@ -479,10 +525,10 @@
   </div>
 </button>
       </div>
-      <h3><a href="/product/7">RapiWhite Full Body Whitening Lotion</a></h3>
+      <h3><a href="/product/rapiwhite-full-body-whitening-lotion">RapiWhite Full Body Whitening Lotion</a></h3>
       <div class="rating">★★★★★ <span>(4.9)</span> <small>22 Reviews</small></div>
-      <span class="old-price">Rs. 1,750</span>
-      <span class="new-price">Rs. 1,599</span>
+      <span class="old-price">Rs. 1,849</span>
+      <span class="new-price">Rs. 1,699</span>
     </div>
 
   </div>

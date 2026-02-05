@@ -1,5 +1,14 @@
 {% extends "base.html" %}
+{% set title = "AcneStop Face Wash | Best Acne Control Face Wash in Pakistan | Siebel Skincare" %}
+{% set description = "Buy AcneStop Face Wash online in Pakistan for clear, acne-free skin. Fights pimples, unclogs pores, and removes excess oil. Dermatologist-tested with Salicylic Acid & Tea Tree Oil." %}
+{% set keywords = "AcneStop face wash, acne face wash Pakistan, best face wash for acne, pimple face wash, salicylic acid face wash, tea tree face wash" %}
+{% set canonical = "https://www.siebel.store/product/" ~ product.slug %}
+{% set og_title = title %}
+{% set og_description = description %}
+{% set og_image = "https://www.siebel.store/static/images/acnestop-facewash.jpg" %}
+{% set og_url = canonical %}
 {% block content %}
+
 <div class="text-xs text-gray-500 flex items-left gap-2 bg-gray-100 py-4 mb-2 md:px-8 px-4">
   <a href="/" class="hover:text-pink-500">Home</a>
   <span>&gt;</span>
@@ -17,7 +26,7 @@
   <div class="absolute top-2 right-2 bg-pink-500 text-white text-xs font-semibold px-3 py-1 border radius 50 border-transparent z-10 shadow">
     {{ ((product.before_price - product.price) / product.before_price * 100) | round(0) | int }}% OFF
   </div>
-    <img src="{{ url_for('static', filename='images/AcneStop-FaceWash.jpg') }}" alt="AcneStop Face Wash" class="rounded-lg shadow w-full object-cover">
+    <img src="{{ url_for('static', filename='images/acnestop-facewash.jpg') }}" alt="AcneStop Face Wash" class="rounded-lg shadow w-full object-cover">
   </div>
 
   <!-- Product Info -->
@@ -120,7 +129,7 @@
     {% for rec in recommendations %}
     <div class="arrival-card relative">
       <div class="image-wrap relative">
-        <a href="/product/{{ rec.id }}">
+        <a href="/product/{{ rec.slug }}">
           <img src="{{ url_for('static', filename=rec.image) }}" alt="{{ rec.name }}">
         </a>
 
@@ -153,7 +162,7 @@
 
       </div>
 
-      <h3><a href="/product/{{ rec.id }}">{{ rec.name }}</a></h3>
+      <h3><a href="/product/{{ rec.slug }}">{{ rec.name }}</a></h3>
       <div class="rating">★★★★★ <span>({{ rec.rating }})</span> <small>{{ rec.reviews }} Reviews</small></div>
       <p>
         <span class="text-gray-500 line-through mr-2">Rs. {{ rec.before_price }}</span>

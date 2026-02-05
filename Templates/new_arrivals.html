@@ -1,5 +1,14 @@
 {% extends "base.html" %}
+{% set title = "Shop New Skincare Arrivals in Pakistan | Siebel Skincare" %}
+{% set description = "Discover our latest skincare launches in Pakistan — from whitening serums to sunblocks and anti-itching bars. 100% authentic, fast delivery & cash on delivery available." %}
+{% set keywords = "new skincare arrivals Pakistan, latest skincare products, whitening serums Pakistan, new sunblocks, siebel new products, face care new arrivals" %}
+{% set canonical = "https://www.siebel.store/new-arrivals" %}
+{% set og_title = title %}
+{% set og_description = description %}
+{% set og_image = "https://www.siebel.store/static/images/hotsellers_ctg.jpg" %}
+{% set og_url = canonical %}
 {% block content %}
+
 
 <!-- Breadcrumb -->
 <div class="bg-gray-100 py-4 border-b border-gray-300">
@@ -32,7 +41,7 @@
     <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for product in products %}
       <div class="border rounded-lg overflow-hidden shadow hover:shadow-lg transition bg-white">
-        <a href="/product/{{ product.id }}">
+        <a href="/product/{{ product.slug }}">
           <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" class="w-full h-56 object-cover">
         </a>
         <div class="p-4">

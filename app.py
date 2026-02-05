@@ -1,6 +1,7 @@
-from flask import Flask, jsonify, render_template, request, session, redirect, url_for
+from flask import Flask, Response, jsonify, render_template, request, session, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail, Message
 import random
 import os
 import json
@@ -18,41 +19,78 @@ if not os.path.exists('data'):
     os.makedirs('data')
 
 app = Flask(__name__)
+
+# Email Configuration
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'siebelskincare@gmail.com'
+app.config['MAIL_PASSWORD'] = 'ttad fomg atha eoqh'
+app.config['MAIL_DEFAULT_SENDER'] = 'siebelskincare@gmail.com'
+
+mail = Mail(app)
+
 app.secret_key = 'super_secret_key'
+
 # -------------------------------
 # Product List (Static Data)
 # -------------------------------
 products = [
-    {"id": 1, "name": "RapiWhite Serum", "price": 1599, "rating": 4.9, "reviews": 17, "image": "images/RapiWhite-Serum.jpg", "before_price": 1750},
-    {"id": 2, "name": "AcneStop Face Wash", "price": 550, "rating": 4.1, "reviews": 22, "image": "images/AcneStop-FaceWash.jpg", "before_price": 650},
-    {"id": 3, "name": "UV Ban Sunblock", "price": 560, "rating": 5.0, "reviews": 37, "image": "images/UvBan.jpg", "before_price": 595},
-    {"id": 4, "name": "RapiWhite Cream", "price": 1150, "rating": 4.8, "reviews": 14, "image": "images/RapiWhite-Cream.jpg", "before_price": 1295},
-    {"id": 5, "name": "AcneStop Serum", "price": 1599, "rating": 4.9, "reviews": 21, "image": "images/AcneStop-Serum.jpg", "before_price": 1750},
-    {"id": 6, "name": "OilRich Body Lotion", "price": 600, "rating": 4.0, "reviews": 11, "image": "images/OilRich-Lotion.jpg", "before_price": 650},
-    {"id": 7, "name": "RapiWhite Full Body Whitening Lotion", "price": 1599, "rating": 4.3, "reviews": 22, "image": "images/RapiWhite-FullBwc.jpg", "before_price": 1750},
-    {"id": 8, "name": "SunSafe Sunblock", "price": 860, "rating": 4.4, "reviews": 21, "image": "images/SunSafe.jpg", "before_price": 950},
-    {"id": 9, "name": "RapiWhite Face Wash", "price": 950, "rating": 5.0, "reviews": 33, "image": "images/RapiWhite-FaceWash.jpg", "before_price": 999},
-    {"id": 10, "name": "RapiWhite Whitening Soap", "price": 445, "rating": 4.1, "reviews": 12, "image": "images/RapiWhite-Soap.jpg", "before_price": 495},
-    {"id": 11, "name": "SkinTar Anti-Itching Bar", "price": 270, "rating": 4.0, "reviews": 11, "image": "images/SkinTar.jpg", "before_price": 230},
-    {"id": 12, "name": "Oil Rich Soap", "price": 270, "rating": 4.2, "reviews": 19, "image": "images/OilRich-Soap.jpg", "before_price": 230},
-    {"id": 13, "name": "Scab Ban Anti-Itching Bar", "price": 270, "rating": 4.4, "reviews": 17, "image": "images/ScabBan.jpg", "before_price": 230},
-    {"id": 14, "name": "RapiWhite Bundle", "price": 3250, "rating": 4.7, "reviews": 15, "image": "images/RapiWhite_Bundle.jpg", "before_price": 3747},
-    {"id": 15, "name": "AcneStop Bundle", "price": 2050, "rating": 4.3, "reviews": 12, "image": "images/AcneStop_Bundle.jpg", "before_price": 2150},
-    {"id": 16, "name": "Ultimate Protection Bundle", "price": 1759, "rating": 4.9, "reviews": 21, "image": "images/Ultimate_Bundle.jpg", "before_price": 1859},
-    {"id": 17, "name": "Face Care Bundle", "price": 3050, "rating": 4.6, "reviews": 18, "image": "images/FaceCare_ctg.jpg", "before_price": 3157}
+    {"id": 1, "name": "RapiWhite Serum","slug": "rapiwhite-serum", "price": 1699, "rating": 4.9, "reviews": 17, "image": "images/rapiwhite-serum.jpg", "before_price": 1849},
+    {"id": 2, "name": "AcneStop Face Wash","slug": "acnestop-face-wash", "price": 550, "rating": 4.1, "reviews": 22, "image": "images/acnestop-facewash.jpg", "before_price": 650},
+    {"id": 3, "name": "UV Ban Sunblock","slug": "uv-ban-sunblock", "price": 595, "rating": 5.0, "reviews": 37, "image": "images/uvban.jpg", "before_price": 695},
+    {"id": 4, "name": "RapiWhite Cream","slug": "rapiwhite-cream", "price": 1149, "rating": 4.8, "reviews": 14, "image": "images/rapiwhite-cream.jpg", "before_price": 1295},
+    {"id": 5, "name": "AcneStop Serum","slug": "acnestop-serum", "price": 1699, "rating": 4.9, "reviews": 21, "image": "images/acnestop-serum.jpg", "before_price": 1849},
+    {"id": 6, "name": "OilRich Body Lotion","slug": "oilrich-body-lotion", "price": 600, "rating": 4.0, "reviews": 11, "image": "images/oilrich-lotion.jpg", "before_price": 650},
+    {"id": 7, "name": "RapiWhite Full Body Whitening Lotion","slug": "rapiwhite-full-body-whitening-lotion", "price": 1599, "rating": 4.3, "reviews": 22, "image": "images/rapiwhite-fullbwc.jpg", "before_price": 1749},
+    {"id": 8, "name": "SunSafe Sunblock","slug": "sunsafe-sunblock", "price": 860, "rating": 4.4, "reviews": 21, "image": "images/sunsafe.jpg", "before_price": 950},
+    {"id": 9, "name": "RapiWhite Face Wash","slug": "rapiwhite-facewash", "price": 950, "rating": 5.0, "reviews": 33, "image": "images/rapiwhite-facewash.jpg", "before_price": 999},
+    {"id": 10, "name": "RapiWhite Whitening Soap","slug": "rapiwhite-whitening-soap", "price": 445, "rating": 4.1, "reviews": 12, "image": "images/rapiwhite-soap.jpg", "before_price": 495},
+    {"id": 11, "name": "SkinTar Anti-Itching Bar","slug": "skintar-anti-itching-bar"
+, "price": 270, "rating": 4.0, "reviews": 11, "image": "images/skintar.jpg", "before_price": 230},
+    {"id": 12, "name": "Oil Rich Soap","slug": "oil-rich-soap", "price": 230, "rating": 4.2, "reviews": 19, "image": "images/oilrich-soap.jpg", "before_price": 270},
+    {"id": 13, "name": "Scab Ban Anti-Itching Bar","slug": "scab-ban-anti-itching-bar", "price": 270, "rating": 4.4, "reviews": 17, "image": "images/scabban.jpg", "before_price": 230},
+    {"id": 14, "name": "RapiWhite Bundle","slug": "rapiwhite-bundle", "price": 3250, "rating": 4.7, "reviews": 15, "image": "images/rapiwhite_bundle.jpg", "before_price": 3747},
+    {"id": 15, "name": "AcneStop Bundle","slug": "acnestop-bundle", "price": 2050, "rating": 4.3, "reviews": 12, "image": "images/acnestop_bundle.jpg", "before_price": 2150},
+    {"id": 16, "name": "Ultimate Protection Bundle","slug": "ultimate-protection-bundle", "price": 1759, "rating": 4.9, "reviews": 21, "image": "images/ultimate_bundle.jpg", "before_price": 1859},
+    {"id": 17, "name": "Face Care Bundle","slug": "face-care-bundle"
+, "price": 3050, "rating": 4.6, "reviews": 18, "image": "images/facecare_ctg.jpg", "before_price": 3157}
 ]
+
+@app.route('/sitemap.xml')
+def sitemap():
+    urls = [
+        "https://www.siebel.store/",
+        "https://www.siebel.store/new-arrivals",
+        "https://www.siebel.store/shop-all",
+        "https://www.siebel.store/bundle-deals",
+        "https://www.siebel.store/customer-reviews"
+    ]
+
+    for product in products:
+        slug = product['name'].lower().replace(" ", "-")
+        urls.append(f"https://www.siebel.store/product/{product['id']}/{slug}")
+
+    xml = render_template('sitemap_template.xml', urls=urls)
+    return Response(xml, mimetype='application/xml')
+
+
+@app.route('/robots.txt')
+def robots_txt():
+    return Response(open('static/robots.txt').read(), mimetype='text/plain')
+
 @app.route('/')
 def home():
     return render_template('index.html', products=products)
 
-@app.route('/product/<int:product_id>')
-def product_page(product_id):
-    product = next((p for p in products if p["id"] == product_id), None)
+@app.route('/product/<slug>')
+def product_page(slug):
+    product = next((p for p in products if p["slug"] == slug), None)
     if not product:
         return "<h1>Product not found</h1>", 404
-    recommendations = random.sample([p for p in products if p['id'] != product_id], 4)
-    reviews = load_reviews(product_id)
-    return render_template(f'product_{product_id}.html', product=product, recommendations=recommendations, product_reviews=reviews)
+    recommendations = random.sample([p for p in products if p['slug'] != slug], 4)
+    reviews = load_reviews(product["id"])
+    return render_template(f'product_{product["id"]}.html', product=product, recommendations=recommendations, product_reviews=reviews)
 
 @app.route('/add-to-cart', methods=['POST'])
 def add_to_cart():
@@ -62,32 +100,38 @@ def add_to_cart():
     product = next((p for p in products if p['id'] == product_id), None)
 
     if product:
-        cart = session.get('cart', [])
-        existing = next((item for item in cart if item['id'] == product_id), None)
-        if existing:
-            existing['quantity'] += quantity
-        else:
-            cart.append({
-                'id': product['id'],
-                'name': product['name'],
-                'price': product['price'],
-                'before_price': product['before_price'],
-                'image': product['image'],
-                'quantity': quantity
-            })
-        session['cart'] = cart
-
-        subtotal = sum(item['quantity'] * item['price'] for item in cart)
-        cart_html = render_template('cart_panel_content.html', cart_items=cart, subtotal=subtotal)
-
-        return jsonify({
-            'success': True,
-            'cart_html': cart_html,
-            'total_quantity': sum(item['quantity'] for item in cart),
-            'subtotal': subtotal
+     cart = session.get('cart', [])
+    existing = next((item for item in cart if item['id'] == product_id), None)
+    if existing:
+        existing['quantity'] += quantity
+    else:
+        cart.append({
+            'id': product['id'],
+            'name': product['name'],
+            'price': product['price'],
+            'before_price': product['before_price'],
+            'image': product['image'],
+            'quantity': quantity
         })
+    session['cart'] = cart
 
-    return jsonify({'success': False})
+    # ✅ Properly calculate totals
+    subtotal, shipping, total = calculate_cart_total(cart)
+
+    cart_html = render_template('cart_panel_content.html',
+                                cart_items=cart,
+                                subtotal=subtotal,
+                                shipping=shipping,
+                                total=total)
+
+    return jsonify({
+        'success': True,
+        'cart_html': cart_html,
+        'total_quantity': sum(item['quantity'] for item in cart),
+        'subtotal': subtotal,
+        'shipping': shipping,
+        'total': total
+    })
 
 @app.route('/update-cart/<int:product_id>/<string:action>', methods=['POST'])
 def update_cart(product_id, action):
@@ -109,17 +153,47 @@ def update_cart(product_id, action):
         total_quantity += item['quantity']
 
     session['cart'] = updated_cart
-    cart_html = render_template('cart_panel_content.html', cart_items=updated_cart, subtotal=subtotal)
 
-    return jsonify({'success': True, 'cart_html': cart_html, 'total_quantity': total_quantity, 'subtotal': subtotal})
+    # ✅ Properly calculate totals
+    subtotal, shipping, total = calculate_cart_total(updated_cart)
+
+    cart_html = render_template('cart_panel_content.html',
+                                cart_items=updated_cart,
+                                subtotal=subtotal,
+                                shipping=shipping,
+                                total=total)
+
+    return jsonify({
+        'success': True,
+        'cart_html': cart_html,
+        'total_quantity': total_quantity,
+        'subtotal': subtotal,
+        'shipping': shipping,
+        'total': total
+    })
+
+
+
+def calculate_cart_total(cart):
+    subtotal = sum(item['price'] * item['quantity'] for item in cart)
+    shipping = 150 if subtotal < 750 and subtotal > 0 else 0
+    total = subtotal + shipping
+    return subtotal, shipping, total
 
 @app.route('/get-cart-data')
 def get_cart_data():
     cart_items = [i for i in session.get('cart', []) if i.get('id') and i.get('quantity', 0) > 0]
     total_quantity = sum(item['quantity'] for item in cart_items)
-    subtotal = sum(item['price'] * item['quantity'] for item in cart_items)
-    cart_html = render_template('cart_panel_content.html', cart_items=cart_items, subtotal=subtotal)
-    return jsonify({'cart_html': cart_html, 'total_quantity': total_quantity, 'subtotal': subtotal})
+    subtotal, shipping, total = calculate_cart_total(cart_items)
+    cart_html = render_template('cart_panel_content.html', cart_items=cart_items, subtotal=subtotal, shipping=shipping, total=total)
+    return jsonify({
+        'cart_html': cart_html, 
+        'total_quantity': total_quantity, 
+        'subtotal': subtotal,
+        'shipping': shipping,
+        'total': total
+    })
+
 
 # -------------------------------
 # Reviews: Save & Load
@@ -258,18 +332,23 @@ def checkout():
 
         print("✅ New order placed:", order_data)
 
+        order_details = ''
+        for item in cart_items:
+            order_details += f"{item['name']} x{item['quantity']} — Rs.{item['price'] * item['quantity']}\n"
+
+        send_order_confirmation_email(order_data['email'], order_details)
         session.pop('cart', None)  # Clear cart after order
         return render_template('order_success.html')
 
     # If GET request: Show checkout page
     cart_items = session.get('cart', [])
-    subtotal = sum(item['price'] * item['quantity'] for item in cart_items)
+    subtotal, shipping, total = calculate_cart_total(cart_items)
     user_data = None
     if 'user' in session:
         customers = load_customers()
         user_data = next((c for c in customers if c['email'] == session['user']), None)
 
-    return render_template('checkout.html', cart_items=cart_items, subtotal=subtotal, user_data=user_data)
+    return render_template('checkout.html', cart_items=cart_items, subtotal=subtotal, shipping=shipping, total=total, user_data=user_data)
 
 
 @app.route('/place-order', methods=['POST'])
@@ -455,7 +534,6 @@ def vitamin_c_products():
 def customer_reviews():
     return render_template('customer_reviews.html')
 
-# Admin Panel
 # ADMIN LOGIN
 app.config['ADMIN_USERNAME'] = 'bilalyasir34@gmail.com'
 app.config['ADMIN_PASSWORD'] = 'LifeIscool4me'
@@ -488,6 +566,18 @@ def save_orders(orders):
     filepath = 'data/orders.json'
     with open(filepath, 'w') as f:
         json.dump(orders, f, indent=2)
+        
+def load_revenue():
+    filepath = 'data/revenue.json'
+    if os.path.exists(filepath):
+        with open(filepath, 'r') as f:
+            return json.load(f).get('revenue', 0)
+    return 0
+
+def save_revenue(amount):
+    filepath = 'data/revenue.json'
+    with open(filepath, 'w') as f:
+        json.dump({'revenue': amount}, f, indent=2)
 
 # Admin authentication decorator
 def admin_login_required(f):
@@ -529,18 +619,26 @@ def admin_logout():
 def admin_dashboard():
     orders = load_orders()
     now = datetime.now()
+    revenue = load_revenue()
+
+    total_orders = len(orders)
+    pending_orders = sum(1 for o in orders if o['status'] == 'Pending')
+    completed_orders = sum(1 for o in orders if o['status'] == 'Completed')
+    cancelled_orders = sum(1 for o in orders if o['status'] == 'Cancelled')
 
     stats = {
-    'total_orders': len(orders),
-    'last_week': sum(1 for o in orders if datetime.strptime(o['date'], "%Y-%m-%d %H:%M") > now - timedelta(days=7)),
-    'last_15_days': sum(1 for o in orders if datetime.strptime(o['date'], "%Y-%m-%d %H:%M") > now - timedelta(days=15)),
-    'last_month': sum(1 for o in orders if datetime.strptime(o['date'], "%Y-%m-%d %H:%M") > now - timedelta(days=30)),
-    'total_revenue': sum(o['total'] for o in orders if o.get('status') != 'Cancelled')
-}
-
-
+        'total_orders': total_orders,
+        'pending_orders': pending_orders,
+        'completed_orders': completed_orders,
+        'cancelled_orders': cancelled_orders,
+        'last_week': sum(1 for o in orders if datetime.strptime(o['date'], "%Y-%m-%d %H:%M") > now - timedelta(days=7)),
+        'last_15_days': sum(1 for o in orders if datetime.strptime(o['date'], "%Y-%m-%d %H:%M") > now - timedelta(days=15)),
+        'last_month': sum(1 for o in orders if datetime.strptime(o['date'], "%Y-%m-%d %H:%M") > now - timedelta(days=30)),
+        'total_revenue': revenue
+    }
 
     return render_template('admin_dashboard.html', orders=orders[::-1], stats=stats)
+
 
 # Admin orders listing
 @app.route('/admin/orders')
@@ -555,13 +653,27 @@ def admin_orders():
 @admin_login_required
 def admin_cancel_order(order_id):
     orders = load_orders()
-    order = next((o for o in orders if o['id'] == order_id), None)
-    if not order:
-        return jsonify({'success': False})
+    revenue = load_revenue()
 
-    order['status'] = 'Cancelled'
+    for order in orders:
+        if order['id'] == order_id:
+            old_status = order['status']
+
+            # Subtract revenue if it was completed before
+            if old_status == 'Completed':
+                revenue -= order['total']
+
+            order['status'] = 'Cancelled'
+
+        #Send email for cancellation
+            send_status_update_email(order['email'], 'Cancelled', order_id)
+            break
+
+
     save_orders(orders)
-    return jsonify({'success': True})
+    save_revenue(revenue)
+
+    return redirect('/admin-dashboard')
 
 # Single order view & status update
 @app.route('/admin/order/<order_id>', methods=['GET', 'POST'])
@@ -579,6 +691,65 @@ def admin_order(order_id):
         return redirect(f'/admin/order/{order_id}')
 
     return render_template('admin_order_detail.html', order=order)
+@app.route('/admin/order/<order_id>/update-status', methods=['POST'])
+@admin_login_required
+def update_order_status_api(order_id):
+    data = request.get_json()
+    new_status = data.get('status')
+
+    orders = load_orders()
+    revenue = load_revenue()
+
+    for order in orders:
+        if order['id'] == order_id:
+            old_status = order['status']
+            order['status'] = new_status
+
+            if new_status == 'Completed' and old_status != 'Completed':
+                revenue += order['total']
+            elif old_status == 'Completed' and new_status != 'Completed':
+                revenue -= order['total']
+
+            if new_status in ['Completed', 'Cancelled']:
+                send_status_update_email(order['email'], new_status, order_id)
+            break
+
+    save_orders(orders)
+    save_revenue(revenue)
+    return jsonify({'success': True})
+
+
+@app.route('/update-order-status/<order_id>', methods=['POST'])
+@admin_login_required
+def update_order_status(order_id):
+    new_status = request.form.get('status')
+    orders = load_orders()
+    revenue = load_revenue()
+
+    for order in orders:
+        if order['id'] == order_id:
+            old_status = order['status']
+            order['status'] = new_status
+
+            # If order was not Completed before, and now marked Completed — add to revenue
+            if new_status == 'Completed' and old_status != 'Completed':
+                revenue += order['total']
+
+            # If it was Completed before, and now changed back — subtract revenue
+            elif old_status == 'Completed' and new_status != 'Completed':
+                revenue -= order['total']
+
+            # Send status update email only if status is Completed or Cancelled
+            if new_status in ['Completed', 'Cancelled']:
+                send_status_update_email(order['email'], new_status, order_id)
+
+            break
+
+    save_orders(orders)
+    save_revenue(revenue)
+    return redirect('/admin-dashboard')
+
+
 
 @app.route('/category/face-care')
 def face_care_category():
@@ -690,9 +861,101 @@ def hot_sellers():
 
     return render_template('hot_sellers.html', products=hot_sellers)
 
+
+# EMAIL CONFIRMATION
+def send_order_confirmation_email(customer_email, order_details):
+    msg = Message('Thank You for Your Order — Siebel Skincare',
+                  recipients=[customer_email])
+
+    msg.html = f"""
+    <html>
+    <body style="font-family: Arial, sans-serif; background-color: #f6f6f6; padding: 20px; color: #333;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <div style="background-color: #FF6B81; padding: 20px; text-align: center;">
+                <h2 style="color: #fff; margin: 0;">Siebel Skincare</h2>
+            </div>
+            <div style="padding: 20px;">
+                <h3 style="margin-top: 0;">Hello!</h3>
+                <p>Thank you for choosing <strong>Siebel Skincare</strong>. We're excited to let you know that we’ve successfully received your order. 🎉</p>
+                
+                <h4 style="margin-bottom: 5px;">Your Order Details:</h4>
+                <pre style="background-color: #f9f9f9; padding: 10px; border-radius: 4px; font-family: monospace;">{order_details}</pre>
+                
+                <p>We’ll start processing your order right away. You’ll receive another email once your package is dispatched.</p>
+                
+                <p style="margin: 20px 0;">If you have any questions, feel free to reach out to us at <a href="mailto:siebelskincare@gmail.com">siebelskincare@gmail.com</a>.</p>
+
+                <p style="margin-bottom: 0;">Thank you for trusting us with your skincare journey!</p>
+
+                <p style="font-weight: bold; color: #FF6B81;">- The Siebel Skincare Team</p>
+            </div>
+            <div style="background-color: #f0f0f0; padding: 10px; text-align: center; font-size: 12px; color: #777;">
+                © 2025 Siebel Skincare. All rights reserved.
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
+    mail.send(msg)
+
+
+def send_status_update_email(customer_email, status, order_id):
+    msg = Message(f'Siebel Skincare — Order {status}',
+                  recipients=[customer_email])
+
+    # Customize message content based on status
+    if status == 'Completed':
+        message_body = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; background-color: #f6f6f6; padding: 20px; color: #333;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <div style="background-color: #28a745; padding: 20px; text-align: center;">
+                    <h2 style="color: #fff; margin: 0;">Order Completed!</h2>
+                </div>
+                <div style="padding: 20px;">
+                    <p>Your order <strong>{order_id}</strong> has been successfully completed. 🚚</p>
+                    <p>We hope you love your products! If you have any questions or feedback, feel free to reply to this email.</p>
+                    <p style="font-weight: bold; color: #28a745;">- The Siebel Skincare Team</p>
+                </div>
+                <div style="background-color: #f0f0f0; padding: 10px; text-align: center; font-size: 12px; color: #777;">
+                    © 2025 Siebel Skincare. All rights reserved.
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+    elif status == 'Cancelled':
+        message_body = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; background-color: #f6f6f6; padding: 20px; color: #333;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <div style="background-color: #dc3545; padding: 20px; text-align: center;">
+                    <h2 style="color: #fff; margin: 0;">Order Cancelled</h2>
+                </div>
+                <div style="padding: 20px;">
+                    <p>We’re sorry to inform you that your order <strong>{order_id}</strong> has been cancelled.</p>
+                    <p>If you believe this was a mistake or you'd like to reorder, feel free to visit our website or reply to this email.</p>
+                    <p style="font-weight: bold; color: #dc3545;">- The Siebel Skincare Team</p>
+                </div>
+                <div style="background-color: #f0f0f0; padding: 10px; text-align: center; font-size: 12px; color: #777;">
+                    © 2025 Siebel Skincare. All rights reserved.
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+    else:
+        # fallback for unknown status — won't likely be needed
+        message_body = f"<p>Your order {order_id} status has been updated to {status}.</p>"
+
+    msg.html = message_body
+    mail.send(msg)
+
 # -------------------------------
 # App Runner
 # -------------------------------
+
 if __name__ == '__main__':
     app.run(debug=True)
 

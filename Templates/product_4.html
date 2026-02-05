@@ -1,5 +1,14 @@
 {% extends "base.html" %}
+{% set title = "RapiWhite Cream | Skin Brightening Cream for Glowing Skin in Pakistan | Siebel Skincare" %}
+{% set description = "RapiWhite Cream is a powerful skin brightening cream that reduces dark spots, pigmentation, and uneven skin tone. Hydrates, nourishes and leaves your skin visibly radiant." %}
+{% set keywords = "skin brightening cream, best whitening cream Pakistan, RapiWhite Cream, dark spot remover cream, even skin tone cream, glowing skin cream" %}
+{% set canonical = "https://www.siebel.store/product/" ~ product.slug %}
+{% set og_title = title %}
+{% set og_description = description %}
+{% set og_image = "https://www.siebel.store/static/images/rapiwhite-cream.jpg" %}
+{% set og_url = canonical %}
 {% block content %}
+
 <div class="text-xs text-gray-500 flex items-left gap-2 bg-gray-100 py-4 mb-2 md:px-8 px-4">
   <a href="/" class="hover:text-pink-500">Home</a>
   <span>&gt;</span>
@@ -17,7 +26,7 @@
   <div class="absolute top-2 right-2 bg-pink-500 text-white text-xs font-semibold px-3 py-1 border radius 50 border-transparent z-10 shadow">
     {{ ((product.before_price - product.price) / product.before_price * 100) | round(0) | int }}% OFF
   </div>
-    <img src="{{ url_for('static', filename='images/RapiWhite-Cream.jpg') }}" alt="RapiWhite Cream" class="rounded-lg shadow w-full object-cover">
+    <img src="{{ url_for('static', filename='images/rapiwhite-cream.jpg') }}" alt="RapiWhite Cream" class="rounded-lg shadow w-full object-cover">
   </div>
 
   <!-- Product Info -->
@@ -72,7 +81,25 @@
   <div class="mt-6">
     <h3 class="text-lg font-semibold mb-2">Description</h3>
     <p class="text-gray-600 leading-relaxed">
-        Apply a small amount evenly on clean, dry face and neck. Massage gently using upward strokes until fully absorbed. Use twice daily.
+        Reveal a brighter, smoother, and naturally radiant complexion with RapiWhite Cream — a powerful skin brightening formula designed to reduce dark spots, even out skin tone, and enhance your skin’s natural glow. Enriched with skin-loving ingredients, this cream deeply hydrates while targeting pigmentation, blemishes, and discoloration, leaving your skin visibly clearer and healthier.
+
+Its lightweight, non-greasy texture absorbs quickly, making it perfect for daily use, whether applied in the morning before stepping out or at night before bed. Consistent use helps improve skin texture, fade stubborn marks, and deliver a soft, youthful glow.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">Key Benefits</h3>
+      <p class="text-gray-600 leading-relaxed">
+        • Brightens dull, uneven skin tone
+      </p>
+      <p class="text-gray-600 leading-relaxed">
+        • Reduces dark spots and pigmentation
+      </p>
+      <p class="text-gray-600 leading-relaxed">
+        • Hydrates and nourishes skin
+      </p>
+      <p class="text-gray-600 leading-relaxed">
+        • Improves overall skin texture and clarity
+      </p>
+      <p class="text-gray-600 leading-relaxed">
+        • Suitable for all skin types
       </p>
     </div>
 
@@ -110,7 +137,7 @@
     {% for rec in recommendations %}
     <div class="arrival-card relative">
       <div class="image-wrap relative">
-        <a href="/product/{{ rec.id }}">
+        <a href="/product/{{ rec.slug }}">
           <img src="{{ url_for('static', filename=rec.image) }}" alt="{{ rec.name }}">
         </a>
 
@@ -144,7 +171,7 @@
 
       </div>
 
-      <h3><a href="/product/{{ rec.id }}">{{ rec.name }}</a></h3>
+      <h3><a href="/product/{{ rec.slug }}">{{ rec.name }}</a></h3>
       <div class="rating">★★★★★ <span>({{ rec.rating }})</span> <small>{{ rec.reviews }} Reviews</small></div>
       <p>
         <span class="text-gray-500 line-through mr-2">Rs. {{ rec.before_price }}</span>

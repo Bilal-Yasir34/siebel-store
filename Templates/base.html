@@ -2,23 +2,93 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Siebel Skincare</title>
+  <!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '502397629066842');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=502397629066842&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <!-- SEO Meta Tags -->
+  <title>{{ title if title else 'Siebel Skincare Pakistan - Official Store' }}</title>
+  <meta name="description" content="{{ description if description else 'Shop authentic skincare products in Pakistan. Whitening serums, sunblocks, anti-itching bars, and more.' }}">
+  <meta name="keywords" content="{{ keywords if keywords else 'skincare Pakistan, whitening serum, sunblock, anti itching bar, siebel skincare' }}">
+  <link rel="canonical" href="{{ canonical if canonical else request.url }}" />
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="{{ og_title if og_title else title }}" />
+  <meta property="og:description" content="{{ og_description if og_description else description }}" />
+  <meta property="og:image" content="{{ og_image if og_image else 'https://siebel.store/static/images/og-default.jpg' }}" />
+  <meta property="og:url" content="{{ og_url if og_url else request.url }}" />
+  <meta property="og:type" content="website" />
+  <!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ og_title if og_title else title }}">
+<meta name="twitter:description" content="{{ og_description if og_description else description }}">
+<meta name="twitter:image" content="{{ og_image if og_image else url_for('static', filename='images/siebel-logo.png') }}">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Organization",
+  "name": "Siebel Skincare Pakistan",
+  "url": "https://www.siebel.store",
+  "logo": "https://siebel.store/static/images/siebel-logo.png",
+  "sameAs": [
+    "https://www.facebook.com/siebel.store",
+    "https://www.instagram.com/siebel.skincare",
+    "https://wa.me/923279975574"
+  ]
+}
+</script>
+
+
+  <!-- Styles & Icons -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2">
+  <script src="{{ url_for('static', filename='scripts.js') }}?v=2"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <style>
-  body {
-    font-family: 'Quicksand', sans-serif;
-  }
-</style>
+  <link rel="icon" href="/static/favicon.ico">
 
+  {% if request.endpoint == 'customer_reviews' %}
+  <title>Customer Reviews | Siebel Skincare Pakistan</title>
+  <meta name="description" content="Read honest product reviews from our happy customers across Pakistan. See how Siebel Skincare helped hundreds improve their skin health.">
+  <meta name="keywords" content="Siebel reviews, customer testimonials, skincare feedback Pakistan, honest skincare reviews, best Pakistani skincare products">
+  <link rel="canonical" href="https://www.siebel.store/customer-reviews">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Customer Reviews | Siebel Skincare Pakistan">
+  <meta property="og:description" content="Check what our customers say about our skincare products. Read 100% genuine reviews and see why everyone trusts Siebel Skincare.">
+  <meta property="og:image" content="https://www.siebel.store/static/images/reviews_banner.jpg">
+  <meta property="og:url" content="https://www.siebel.store/customer-reviews">
+  <meta property="og:type" content="website">
+  
+{% endif %}
+
+
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+    }
+  </style>
 
   <!-- Topbar -->
-<div class="topbar bg-pink-100 text-white text-sm text-center py-2">
-  <p>📦 Free Delivery Nationwide on Orders above RS.750</p>
-</div>
+  <div class="topbar bg-pink-100 text-white text-sm text-center py-2">
+    <p>📦 Free Delivery Nationwide on Orders above RS.750</p>
+  </div>
 </head>
 
 <body class="bg-white text-gray-800">
@@ -121,7 +191,7 @@
     <a href="/shop-all" class="mobile-link">Shop All</a>
     <a href="/bundle-deals" class="mobile-link">Bundle Deals</a>
     <a href="/vitamin-c-products" class="mobile-link">Vitamin C Products</a>
-    <a href="/customer.reviews" class="mobile-link">Customer Reviews</a>
+    <a href="/customer-reviews" class="mobile-link">Customer Reviews</a>
   </nav>
 
   <div class="mt-4">
@@ -185,9 +255,9 @@
       <div>
         <h3 class="text-lg font-semibold mb-4">Shop</h3>
         <ul class="space-y-2">
-          <li><a href="/#best-sellers" class="hover:text-pink-300 transition">Best Selling</a></li>
-          <li><a href="/categories/face-care" class="hover:text-pink-300 transition">Face Care</a></li>
-          <li><a href="/categories/bundle-deals" class="hover:text-pink-300 transition">Bundle Deals</a></li>
+          <li><a href="/category/hot-sellers" class="hover:text-pink-300 transition">Best Selling</a></li>
+          <li><a href="/category/face-care" class="hover:text-pink-300 transition">Face Care</a></li>
+          <li><a href="/bundle-deals" class="hover:text-pink-300 transition">Bundle Deals</a></li>
         </ul>
       </div>
 

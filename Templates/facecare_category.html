@@ -1,5 +1,14 @@
 {% extends "base.html" %}
+{% set title = "Buy Best Face Care Products in Pakistan | Siebel Skincare" %}
+{% set description = "Discover premium face care products in Pakistan including whitening serums, brightening creams, acne treatments & more. Cash on delivery available nationwide." %}
+{% set keywords = "face care products Pakistan, whitening serum Pakistan, acne treatment, face wash Pakistan, skin brightening products, siebel skincare" %}
+{% set canonical = "https://www.siebel.store/category/face-care" %}
+{% set og_title = title %}
+{% set og_description = description %}
+{% set og_image = "https://www.siebel.store/static/images/facecare_ctg.jpg" %}
+{% set og_url = canonical %}
 {% block content %}
+
 
 <!-- Breadcrumb -->
 <div class="bg-gray-100 py-4 border-b border-gray-300">
@@ -29,7 +38,7 @@
     <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for product in products %}
       <div class="border rounded-lg overflow-hidden shadow hover:shadow-lg transition bg-white">
-        <a href="/product/{{ product.id }}">
+        <a href="/product/{{ product.slug }}">
           <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" class="w-full h-56 object-cover">
         </a>
         <div class="p-4">

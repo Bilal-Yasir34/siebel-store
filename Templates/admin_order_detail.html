@@ -2,130 +2,129 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Order #{{ order.id }} | Siebel Admin</title>
+  <title>Order #{{ order.id }} | Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="/static/favicon.ico">
+  <style>body{background:#0F172A}</style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="text-white min-h-screen p-4 space-y-4">
 
-<div class="flex flex-col md:flex-row">
+  <!-- Header -->
+  <header class="flex flex-wrap justify-between items-center gap-3 mb-2">
+    <h1 class="text-xl font-bold">🧾 Order #{{ order.id }}</h1>
+    <div class="flex gap-3 text-sm">
+      <a href="/admin-dashboard" class="text-pink-400 hover:underline">Dashboard</a>
+      <a href="/admin/orders" class="text-pink-400 hover:underline">Orders</a>
+      <a href="/admin-logout" class="text-red-400 hover:underline">Logout</a>
+    </div>
+  </header>
 
-  <!-- Sidebar (Desktop only) -->
-  <aside class="hidden md:block w-60 bg-white shadow h-screen p-4">
-    <h1 class="text-2xl font-bold mb-6 text-blue-600">Siebel Admin</h1>
-    <nav class="space-y-4">
-      <a href="/admin-dashboard" class="block p-2 rounded hover:bg-blue-50">📊 Dashboard</a>
-      <a href="/admin/orders" class="block p-2 rounded hover:bg-blue-50">📑 Orders</a>
-      <a href="/customer-reviews" class="block p-2 rounded hover:bg-blue-50">⭐ Reviews</a>
-      <a href="/" class="block p-2 rounded text-green-600 hover:bg-green-50">🏬 Store</a>
-      <a href="/admin-logout" class="block p-2 rounded text-red-600 hover:bg-red-50">🚪 Logout</a>
-    </nav>
-  </aside>
+  <!-- Customer Details -->
+  <div class="bg-white/10 p-4 rounded">
+    <h2 class="text-base font-semibold mb-2">👤 Customer</h2>
+    <p class="text-sm">Name: {{ order.name }}</p>
+    <p class="text-sm">Email: {{ order.email }}</p>
+    <p class="text-sm">Phone: {{ order.phone }}</p>
+    <p class="text-sm">Address: {{ order.address }}, {{ order.city }}, {{ order.country }}</p>
+  </div>
 
-  <!-- Main Content -->
-  <main class="flex-1 p-4 md:p-8 space-y-8">
+  <!-- Order Items -->
+  <div class="bg-white/10 p-4 rounded">
+    <h2 class="text-base font-semibold mb-3">📦 Items</h2>
 
-    <h2 class="text-2xl md:text-3xl font-bold flex items-center"><span class="mr-2">🧾</span> Order #{{ order.id }}</h2>
-
-    <!-- Customer Details -->
-    <div class="bg-white p-5 md:p-6 rounded-lg shadow hover:shadow-md transition">
-      <h3 class="text-lg md:text-xl font-semibold mb-3">👤 Customer Details</h3>
-      <p><strong>Name:</strong> {{ order.name }}</p>
-      <p><strong>Email:</strong> {{ order.email }}</p>
-      <p><strong>Phone:</strong> {{ order.phone }}</p>
-      <p><strong>Address:</strong> {{ order.address }}, {{ order.city }}, {{ order.country }}</p>
+    <!-- Desktop Table -->
+    <div class="hidden md:block">
+      <table class="w-full text-left text-sm">
+        <thead>
+          <tr class="border-b bg-white/5">
+            <th class="py-2 px-2">Product</th>
+            <th class="py-2 px-2">Quantity</th>
+            <th class="py-2 px-2">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order.cart_items %}
+          <tr class="border-b border-white/10">
+            <td class="py-2 px-2">{{ item.name }}</td>
+            <td class="py-2 px-2">{{ item.quantity }}</td>
+            <td class="py-2 px-2">Rs. {{ item.price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
 
-    <!-- Order Items -->
-    <div class="bg-white p-5 md:p-6 rounded-lg shadow hover:shadow-md transition">
-      <h3 class="text-lg md:text-xl font-semibold mb-3">📦 Order Items</h3>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead>
-            <tr class="border-b bg-blue-50">
-              <th class="py-2 px-2">Product</th>
-              <th class="py-2 px-2">Quantity</th>
-              <th class="py-2 px-2">Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in order.cart_items %}
-            <tr class="border-b">
-              <td class="py-2 px-2">{{ item.name }}</td>
-              <td class="py-2 px-2">{{ item.quantity }}</td>
-              <td class="py-2 px-2">Rs {{ item.price }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+    <!-- Mobile Cards -->
+    <div class="md:hidden space-y-2">
+      {% for item in order.cart_items %}
+      <div class="bg-white/10 p-3 rounded">
+        <p class="text-sm font-semibold">{{ item.name }}</p>
+        <p class="text-xs">Qty: {{ item.quantity }}</p>
+        <p class="text-xs">Rs. {{ item.price }}</p>
       </div>
-      <p class="text-lg font-bold mt-4">Total: Rs {{ order.total }}</p>
+      {% endfor %}
     </div>
 
-    <!-- Order Status -->
-    <div class="bg-white p-5 md:p-6 rounded-lg shadow hover:shadow-md transition space-y-5">
-      <h3 class="text-lg md:text-xl font-semibold">🚦 Order Status</h3>
+    <p class="text-lg font-bold mt-3">Total: Rs. {{ order.total }}</p>
+  </div>
 
-      <div class="flex flex-wrap gap-3">
-        <select id="status-select" class="border border-gray-300 rounded px-4 py-2 w-full md:w-48">
-          <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
-          <option value="In Progress" {% if order.status == 'In Progress' %}selected{% endif %}>In Progress</option>
-          <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
-          <option value="Paid" {% if order.status == 'Paid' %}selected{% endif %}>Paid</option>
-          <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
-        </select>
+  <!-- Status Controls -->
+  <div class="bg-white/10 p-4 rounded space-y-3">
+    <h2 class="text-base font-semibold">🚦 Status</h2>
 
-        <button onclick="updateStatus()" class="bg-black text-white rounded px-4 py-2 hover:bg-gray-800 w-full md:w-auto">Update Status</button>
-      </div>
+    <form id="status-form" class="flex flex-wrap gap-2">
+      <select id="status-select" class="border border-white/20 bg-white/5 text-gray-500 px-3 py-2 rounded text-sm">
+        <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+        <option value="In Progress" {% if order.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+        <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
+        <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+      </select>
 
-      <button onclick="cancelOrder()" class="bg-red-600 text-white rounded px-4 py-2 hover:bg-red-700 w-full md:w-auto">❌ Cancel Order</button>
+      <button type="button" onclick="updateStatus()" class="bg-pink-500 px-3 py-2 rounded text-sm hover:bg-pink-600">Update</button>
+      <button type="button" onclick="cancelOrder()" class="bg-red-600 px-3 py-2 rounded text-sm hover:bg-red-700">Cancel</button>
+    </form>
 
-      <p id="status-message" class="text-green-600 font-semibold hidden">Status updated successfully!</p>
-    </div>
+    <p id="status-message" class="text-green-500 font-medium hidden"></p>
+  </div>
 
-  </main>
-
-</div>
-
-<!-- Mobile Sticky Navbar -->
-<div class="fixed bottom-0 left-0 right-0 bg-white border-t flex md:hidden justify-around p-2 shadow">
-  <a href="/admin-dashboard" class="flex flex-col items-center text-xs text-gray-700">📊<span>Dashboard</span></a>
-  <a href="/admin/orders" class="flex flex-col items-center text-xs text-blue-600">📑<span>Orders</span></a>
-  <a href="/customer-reviews" class="flex flex-col items-center text-xs text-gray-700">⭐<span>Reviews</span></a>
-  <a href="/" class="flex flex-col items-center text-xs text-green-600">🏬<span>Store</span></a>
-</div>
+  <!-- Mobile Sticky Navbar -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white/5 border-t border-white/20 flex justify-around p-2 md:hidden">
+    <a href="/admin-dashboard" class="flex flex-col items-center text-xs">📊<span>Dashboard</span></a>
+    <a href="/admin/orders" class="flex flex-col items-center text-xs">📑<span>Orders</span></a>
+    <a href="/" class="flex flex-col items-center text-xs text-green-500">🏬<span>Store</span></a>
+  </div>
 
 <script>
-  function updateStatus() {
-    const newStatus = document.getElementById('status-select').value;
-    fetch('/admin/order/{{ order.id }}/update-status', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ status: newStatus })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        const msg = document.getElementById('status-message');
-        msg.classList.remove('hidden');
-        msg.textContent = "Order status updated to " + newStatus + "!";
-      }
-    });
-  }
+function updateStatus() {
+  const newStatus = document.getElementById('status-select').value;
+  fetch('/admin/order/{{ order.id }}/update-status', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: newStatus })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      const msg = document.getElementById('status-message');
+      msg.classList.remove('hidden');
+      msg.textContent = "Order updated to " + newStatus + "!";
+    }
+  });
+}
 
-  function cancelOrder() {
-    if (!confirm('Cancel this order? This cannot be undone.')) return;
-    fetch('/admin/order/{{ order.id }}/cancel', { method: 'POST' })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        document.getElementById('status-message').classList.remove('hidden');
-        document.getElementById('status-message').textContent = "Order cancelled.";
-        document.getElementById('status-select').value = "Cancelled";
-      }
-    });
-  }
+function cancelOrder() {
+  if (!confirm('Cancel this order?')) return;
+  fetch('/admin/order/{{ order.id }}/cancel', { method: 'POST' })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      document.getElementById('status-message').classList.remove('hidden');
+      document.getElementById('status-message').textContent = "Order cancelled.";
+      document.getElementById('status-select').value = "Cancelled";
+    }
+  });
+}
 </script>
 
 </body>

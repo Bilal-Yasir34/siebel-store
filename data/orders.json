@@ -75,7 +75,7 @@
     "total": 2250,
     "date": "2025-06-29 16:26",
     "id": "058b6973-0f48-4e09-a159-79d0cf19b7da",
-    "status": "Pending"
+    "status": "Cancelled"
   },
   {
     "email": "bilalyasir34@gmail.com",
@@ -101,6 +101,170 @@
     "total": 1599,
     "date": "2025-06-30 00:32",
     "id": "c03017bc-aac4-4e54-b4b2-65be5d59226e",
+    "status": "Cancelled"
+  },
+  {
+    "email": "bilalyasir34@gmail.com",
+    "phone": "03467555698",
+    "name": "M Bilal Yasir",
+    "address": "Shadman Colony, Rehman Shaheed Road, Gujrat",
+    "city": "Gujrat",
+    "state": "",
+    "postal_code": "50700",
+    "country": "Pakistan",
+    "payment_method": "cod",
+    "note": "",
+    "cart_items": [
+      {
+        "before_price": 595,
+        "id": 3,
+        "image": "images/uvban.jpg",
+        "name": "UV Ban Sunblock",
+        "price": 560,
+        "quantity": 1
+      }
+    ],
+    "total": 560,
+    "date": "2025-06-30 16:44",
+    "id": "5a62931b-a1cf-4eaa-958d-e796e15f54ee",
+    "status": "Cancelled"
+  },
+  {
+    "email": "bilalyasir34@gmail.com",
+    "phone": "03467555698",
+    "name": "M Bilal Yasir",
+    "address": "Shadman Colony, Rehman Shaheed Road, Gujrat",
+    "city": "Gujrat",
+    "state": "",
+    "postal_code": "50700",
+    "country": "Pakistan",
+    "payment_method": "cod",
+    "note": "",
+    "cart_items": [
+      {
+        "before_price": 650,
+        "id": 2,
+        "image": "images/acnestop-facewash.jpg",
+        "name": "AcneStop Face Wash",
+        "price": 550,
+        "quantity": 1
+      }
+    ],
+    "total": 550,
+    "date": "2025-06-30 18:04",
+    "id": "8d0018db-d7e8-44bb-8ac3-da3b2eec805c",
+    "status": "Cancelled"
+  },
+  {
+    "email": "bilalyasir34@gmail.com",
+    "phone": "03467555698",
+    "name": "M Bilal Yasir",
+    "address": "Shadman Colony, Rehman Shaheed Road, Gujrat",
+    "city": "Gujrat",
+    "state": "",
+    "postal_code": "50700",
+    "country": "Pakistan",
+    "payment_method": "cod",
+    "note": "",
+    "cart_items": [
+      {
+        "before_price": 650,
+        "id": 2,
+        "image": "images/acnestop-facewash.jpg",
+        "name": "AcneStop Face Wash",
+        "price": 550,
+        "quantity": 1
+      }
+    ],
+    "total": 550,
+    "date": "2025-06-30 18:15",
+    "id": "a7bdb175-893a-42c4-a5b7-59fc577ce610",
+    "status": "Cancelled"
+  },
+  {
+    "email": "bilalyasir34@gmail.com",
+    "phone": "03467555698",
+    "name": "M Bilal Yasir",
+    "address": "Shadman Colony, Rehman Shaheed Road, Gujrat",
+    "city": "Gujrat",
+    "state": "",
+    "postal_code": "50700",
+    "country": "Pakistan",
+    "payment_method": "cod",
+    "note": "",
+    "cart_items": [
+      {
+        "before_price": 650,
+        "id": 2,
+        "image": "images/acnestop-facewash.jpg",
+        "name": "AcneStop Face Wash",
+        "price": 550,
+        "quantity": 1
+      }
+    ],
+    "total": 550,
+    "date": "2025-07-03 20:51",
+    "id": "fdda2e71-020c-47ff-9f5f-03c22a4e3c39",
+    "status": "Cancelled"
+  },
+  {
+    "email": "bilalyasir34@gmail.com",
+    "phone": "03467555698",
+    "name": "M Bilal Yasir",
+    "address": "Shadman Colony, Rehman Shaheed Road, Gujrat",
+    "city": "Gujrat",
+    "state": "",
+    "postal_code": "50700",
+    "country": "Pakistan",
+    "payment_method": "cod",
+    "note": "",
+    "cart_items": [
+      {
+        "before_price": 1750,
+        "id": 1,
+        "image": "images/rapiwhite-serum.jpg",
+        "name": "RapiWhite Serum",
+        "price": 1599,
+        "quantity": 1
+      }
+    ],
+    "total": 1599,
+    "date": "2025-07-03 21:02",
+    "id": "18bd1864-050c-4adc-8344-2d163989db15",
+    "status": "Cancelled"
+  },
+  {
+    "email": "bilalyasir34@gmail.com",
+    "phone": "03467555698",
+    "name": "M Bilal Yasir",
+    "address": "Shadman Colony, Rehman Shaheed Road, Gujrat",
+    "city": "Gujrat",
+    "state": "",
+    "postal_code": "50700",
+    "country": "Pakistan",
+    "payment_method": "cod",
+    "note": "",
+    "cart_items": [
+      {
+        "before_price": 1750,
+        "id": 1,
+        "image": "images/rapiwhite-serum.jpg",
+        "name": "RapiWhite Serum",
+        "price": 1599,
+        "quantity": 1
+      },
+      {
+        "before_price": 1295,
+        "id": 4,
+        "image": "images/rapiwhite-cream.jpg",
+        "name": "RapiWhite Cream",
+        "price": 1150,
+        "quantity": 1
+      }
+    ],
+    "total": 2749,
+    "date": "2025-07-03 21:19",
+    "id": "799fd781-5b84-4db5-b8d2-8fd121aa0e8c",
     "status": "Cancelled"
   }
 ]

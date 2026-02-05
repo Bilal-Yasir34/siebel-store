@@ -2,129 +2,103 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Bilal Yasir's Admin Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siebel Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="/static/favicon.ico">
-  <style>
-    .mobile-nav { display: none; }
-    @media (max-width: 768px) {
-      .mobile-nav {
-        display: flex;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: #fff;
-        border-top: 1px solid #ddd;
-        z-index: 50;
-      }
-      .mobile-nav a {
-        flex: 1;
-        text-align: center;
-        padding: 12px 0;
-        font-size: 14px;
-      }
-    }
-  </style>
+  <style>body{background:#0F172A}</style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="text-white min-h-screen p-3">
 
-<div class="flex flex-col md:flex-row">
+  <!-- Header -->
+  <header class="flex flex-wrap justify-between items-center mb-6 gap-2">
+    <h1 class="text-2xl font-bold">Dashboard</h1>
+    <div class="flex gap-3 text-sm">
+      <a href="/" class="text-pink-400 hover:underline">← Store</a>
+      <a href="/admin-logout" class="text-red-400 hover:underline">Logout</a>
+    </div>
+  </header>
 
-  <!-- Sidebar for desktop -->
-  <aside class="hidden md:block w-60 bg-white shadow h-screen p-4">
-    <h1 class="text-2xl font-bold mb-6 text-blue-600">Siebel Admin</h1>
-    <nav class="space-y-4">
-      <a href="/admin-dashboard" class="block p-2 rounded hover:bg-blue-50">📊 Dashboard</a>
-      <a href="#" onclick="toggleOrders()" class="block p-2 rounded hover:bg-blue-50">📑 Orders</a>
-      <a href="/customer-reviews" class="block p-2 rounded hover:bg-blue-50">⭐ Customer Reviews</a>
-      <a href="/" class="block p-2 rounded text-green-600 hover:bg-green-50">🏬 Visit Store</a>
-      <a href="/admin-logout" class="block p-2 rounded text-red-600 hover:bg-red-50">🚪 Logout</a>
-    </nav>
-  </aside>
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-5">
+    <div class="bg-white/10 p-3 rounded text-center">
+      <h2 class="text-xs font-semibold">Orders</h2>
+      <p class="text-xl mt-1 font-bold">{{ stats.total_orders }}</p>
+    </div>
+    <div class="bg-white/10 p-3 rounded text-center">
+      <h2 class="text-xs font-semibold">Revenue</h2>
+      <p class="text-xl mt-1 font-bold">Rs. {{ stats.total_revenue }}</p>
+    </div>
+    <div class="bg-white/10 p-3 rounded text-center">
+      <h2 class="text-xs font-semibold">Pending</h2>
+      <p class="text-xl mt-1 font-bold">{{ stats.pending_orders }}</p>
+    </div>
+    <div class="bg-white/10 p-3 rounded text-center">
+      <h2 class="text-xs font-semibold">Completed</h2>
+      <p class="text-xl mt-1 font-bold">{{ stats.completed_orders }}</p>
+    </div>
+    <div class="bg-white/10 p-3 rounded text-center">
+      <h2 class="text-xs font-semibold">Cancelled</h2>
+      <p class="text-xl mt-1 font-bold">{{ stats.cancelled_orders }}</p>
+    </div>
+  </div>
 
-  <!-- Main Content -->
-  <main class="flex-1 p-6 space-y-6 mb-20 md:mb-0">
+  <!-- Orders Desktop Table -->
+  <div class="hidden md:block overflow-x-auto rounded border border-white/10 mb-6">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="text-gray-300 bg-white/5 border-b border-white/10 text-sm">
+          <th class="p-3">Order ID</th>
+          <th class="p-3">Customer</th>
+          <th class="p-3">Total</th>
+          <th class="p-3">Status</th>
+          <th class="p-3">Date</th>
+          <th class="p-3">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr class="border-b border-white/10 hover:bg-white/5 text-sm">
+          <td class="p-3">
+            <a href="/admin/order/{{ order.id }}" class="text-pink-400 hover:underline">{{ order.id }}</a>
+          </td>
+          <td class="p-3">{{ order.name }}</td>
+          <td class="p-3">Rs. {{ order.total }}</td>
+          <td class="p-3">{{ order.status }}</td>
+          <td class="p-3">{{ order.date }}</td>
+          <td class="p-3">
+            <form method="POST" action="/admin/order/{{ order.id }}/cancel">
+              <button class="bg-red-600 text-xs px-3 py-1 rounded hover:bg-red-700"
+                onclick="return confirm('Cancel this order?')">Cancel</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
-    <h2 class="text-3xl font-bold flex items-center"><span class="mr-2">📊</span> Dashboard Overview</h2>
-
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="bg-white p-4 rounded shadow text-center">
-        <h3 class="text-lg font-semibold">📦 Orders</h3>
-        <p class="text-2xl font-bold mt-1">{{ stats.total_orders }}</p>
+  <!-- Orders Mobile Cards -->
+  <div class="space-y-3 md:hidden">
+    {% for order in orders %}
+    <div class="bg-white/10 p-3 rounded">
+      <div class="flex justify-between items-center mb-1">
+        <h3 class="text-sm font-bold">#{{ order.id }}</h3>
+        <span class="text-xs bg-gray-300/20 px-2 py-0.5 rounded">{{ order.status }}</span>
       </div>
-      <div class="bg-white p-4 rounded shadow text-center">
-        <h3 class="text-lg font-semibold">🗓️ This Month</h3>
-        <p class="text-2xl font-bold mt-1">{{ stats.last_month }}</p>
-      </div>
-      <div class="bg-white p-4 rounded shadow text-center">
-        <h3 class="text-lg font-semibold">💰 Revenue</h3>
-        <p class="text-2xl font-bold mt-1">Rs {{ stats.monthly_revenue }}</p>
-      </div>
-      <div class="bg-white p-4 rounded shadow text-center">
-        <h3 class="text-lg font-semibold">⭐ Reviews</h3>
-        <p class="text-2xl font-bold mt-1">{{ stats.total_reviews }}</p>
+      <p class="text-xs">👤 {{ order.name }}</p>
+      <p class="text-xs">💵 Rs. {{ order.total }}</p>
+      <p class="text-xs">📅 {{ order.date }}</p>
+      <div class="flex gap-2 mt-2">
+        <a href="/admin/order/{{ order.id }}" class="bg-pink-500 text-xs px-3 py-1 rounded hover:bg-pink-600">Details</a>
+        <form method="POST" action="/admin/order/{{ order.id }}/cancel">
+          <button class="bg-red-600 text-xs px-3 py-1 rounded hover:bg-red-700"
+            onclick="return confirm('Cancel this order?')">Cancel</button>
+        </form>
       </div>
     </div>
-
-    <!-- Orders Table -->
-    <div id="orders-section" class="hidden md:block">
-      <h3 class="text-2xl font-bold flex items-center mt-8"><span class="mr-2">📑</span> Recent Orders</h3>
-
-      <div class="overflow-x-auto mt-4">
-        <table class="w-full bg-white rounded shadow">
-          <thead>
-            <tr class="bg-blue-50 text-left">
-              <th class="px-4 py-2">Order ID</th>
-              <th class="px-4 py-2">Customer</th>
-              <th class="px-4 py-2">Total</th>
-              <th class="px-4 py-2">Status</th>
-              <th class="px-4 py-2">Date</th>
-              <th class="px-4 py-2">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for order in orders %}
-            <tr class="border-t">
-              <td class="px-4 py-2">{{ order.id }}</td>
-              <td class="px-4 py-2">{{ order.name }}</td>
-              <td class="px-4 py-2">Rs {{ order.total }}</td>
-              <td class="px-4 py-2">{{ order.status }}</td>
-              <td class="px-4 py-2">{{ order.date }}</td>
-              <td class="px-4 py-2">
-                <a href="/admin/order/{{ order.id }}" class="text-blue-600 hover:underline">View</a>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-<!-- Mobile Bottom Nav -->
-<nav class="mobile-nav border-t">
-  <a href="/admin-dashboard" class="text-blue-600">📊<br>Dashboard</a>
-  <a href="#" onclick="toggleOrders()" class="text-gray-800">📑<br>Orders</a>
-  <a href="/customer-reviews" class="text-gray-800">⭐<br>Reviews</a>
-  <a href="/" class="text-green-600">🏬<br>Store</a>
-</nav>
-
-<script>
-function toggleOrders() {
-  const section = document.getElementById('orders-section');
-  if (section.classList.contains('hidden')) {
-    section.classList.remove('hidden');
-    section.scrollIntoView({ behavior: 'smooth' });
-  } else {
-    section.classList.add('hidden');
-  }
-}
-</script>
+    {% endfor %}
+  </div>
 
 </body>
 </html>

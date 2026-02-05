@@ -1,5 +1,14 @@
 {% extends "base.html" %}
+{% set title = "RapiWhite Serum | Buy Original Whitening Serum in Pakistan | Siebel Skincare" %}
+{% set description = "Shop RapiWhite Whitening Serum online in Pakistan. Brighten your skin tone, fade spots, and get an even, radiant complexion. Nationwide delivery & cash on delivery available." %}
+{% set keywords = "RapiWhite serum, skin whitening serum Pakistan, glutathione serum, best whitening serum, face brightening serum, remove dark spots serum" %}
+{% set canonical = "https://www.siebel.store/product/" ~ product.slug %}
+{% set og_title = title %}
+{% set og_description = description %}
+{% set og_image = "https://www.siebel.store/static/images/rapiwhite-serum.jpg" %}
+{% set og_url = canonical %}
 {% block content %}
+
 <div class="text-xs text-gray-500 flex items-left gap-2 bg-gray-100 py-4 mb-2 md:px-8 px-4">
   <a href="/" class="hover:text-pink-500">Home</a>
   <span>&gt;</span>
@@ -18,7 +27,7 @@
     {{ ((product.before_price - product.price) / product.before_price * 100) | round(0) | int }}% OFF
   </div>
 
-  <img src="{{ url_for('static', filename='images/RapiWhite-Serum.jpg') }}" alt="RapiWhite Serum" class="rounded-lg shadow w-full object-cover">
+  <img src="{{ url_for('static', filename='images/rapiwhite-serum.jpg') }}" alt="RapiWhite Serum" class="rounded-lg shadow w-full object-cover">
 </div>
 
   <!-- Product Info -->
@@ -63,7 +72,7 @@
   <!-- Buy It Now Button -->
   <button
   type="button"
-  onclick="buyItNow({{ product.id }})"
+  onclick="buyItNow({{ product.id}})"
   class="w-full md:w-[545px] py-3 bg-black text-white font-semibold rounded-full hover:bg-pink-200 hover:text-black transition text-center">
   Buy It Now
 </button>
@@ -125,7 +134,7 @@
     {% for rec in recommendations %}
     <div class="arrival-card relative">
       <div class="image-wrap relative">
-        <a href="/product/{{ rec.id }}">
+        <a href="/product/{{ rec.slug }}">
           <img src="{{ url_for('static', filename=rec.image) }}" alt="{{ rec.name }}">
         </a>
 
@@ -160,7 +169,7 @@
 
       </div>
 
-      <h3><a href="/product/{{ rec.id }}">{{ rec.name }}</a></h3>
+      <h3><a href="/product/{{ rec.slug }}">{{ rec.name }}</a></h3>
       <div class="rating">★★★★★ <span>({{ rec.rating }})</span> <small>{{ rec.reviews }} Reviews</small></div>
       <p>
         <span class="text-gray-500 line-through mr-2">Rs. {{ rec.before_price }}</span>
@@ -269,7 +278,7 @@
 
       <textarea name="comment" placeholder="Your Review" required class="w-full border px-4 py-2 rounded focus:outline-none h-28 mb-4"></textarea>
 
-      <button type="button" onclick="submitReview({{ product.id }})" class="w-full bg-pink-200 hover:bg-black hover:text-white transition text-black font-semibold rounded-full py-3">
+      <button type="button" onclick="submitReview({{ product.id}})" class="w-full bg-pink-200 hover:bg-black hover:text-white transition text-black font-semibold rounded-full py-3">
         Submit Review
       </button>
     </form>
@@ -312,4 +321,23 @@
 </script>
 </div>
 </section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "{{ product.name }}",
+  "image": "https://www.siebel.store/static/{{ product.image }}",
+  "description": "{{ description }}",
+  "sku": "SKU-{{ product.slug }}",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "PKR",
+    "price": "{{ product.price }}",
+    "availability": "https://schema.org/InStock",
+    "url": "https://www.siebel.store/product/{{ product.slug }}"
+  }
+}
+</script>
+
 {% endblock %}

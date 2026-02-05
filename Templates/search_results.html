@@ -11,7 +11,7 @@
     <img src="{{ url_for('static', filename=product.image) }}" class="w-full rounded">
     </a>
     <h3 class="mt-2 font-semibold">{{ product.name }}</h3>
-    <p class="text-red-500 font-bold">PKR {{ product.price }}</p>
+    <p class="text-red-500 font-bold">Rs. {{ product.price }}</p>
     </div>
     {% endfor %}
     </div>

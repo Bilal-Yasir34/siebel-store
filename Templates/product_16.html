@@ -1,5 +1,14 @@
 {% extends "base.html" %}
+{% set title = "Ultimate Protection Bundle | SunSafe & RapiWhite Face Wash in Pakistan" %}
+{% set description = "Shield and cleanse your skin with the Ultimate Protection Bundle — featuring SunSafe SPF100 Sunblock and RapiWhite Face Wash for daily skin defense in Pakistan." %}
+{% set keywords = "Ultimate Protection Bundle, SunSafe sunblock Pakistan, RapiWhite Face Wash, sun protection kit Pakistan, sunblock and face wash set, skincare bundle Pakistan" %}
+{% set canonical = "https://www.siebel.store/product/" ~ product.slug %}
+{% set og_title = title %}
+{% set og_description = description %}
+{% set og_image = "https://www.siebel.store/static/images/ultimate_bundle.jpg" %}
+{% set og_url = canonical %}
 {% block content %}
+
 <div class="text-xs text-gray-500 flex items-left gap-2 bg-gray-100 py-4 mb-2 md:px-8 px-4">
   <a href="/" class="hover:text-pink-500">Home</a>
   <span>&gt;</span>
@@ -17,7 +26,7 @@
   <div class="absolute top-2 right-2 bg-pink-500 text-white text-xs font-semibold px-3 py-1 border radius 50 border-transparent z-10 shadow">
     {{ ((product.before_price - product.price) / product.before_price * 100) | round(0) | int }}% OFF
   </div>
-    <img src="{{ url_for('static', filename='images/Ultimate_Bundle.jpg') }}" alt="Ultimate Protection Bundle" class="rounded-lg shadow w-full object-cover">
+    <img src="{{ url_for('static', filename='images/ultimate_bundle.jpg') }}" alt="Ultimate Protection Bundle" class="rounded-lg shadow w-full object-cover">
   </div>
 
   <div class="w-full md:w-1/2 flex flex-col">
@@ -71,14 +80,18 @@
   <div class="mt-6">
     <h3 class="text-lg font-semibold mb-2">Description</h3>
     <p class="text-gray-600 leading-relaxed">
-        Scab Ban is a gentle anti-itching cleansing bar designed to soothe irritated, itchy skin and calm rashes. Formulated with natural ingredients, it provides quick relief while maintaining skin softness.
-        <br><strong>Ingredients:</strong> Tea Tree Oil, Calamine, Aloe Vera
+        Protect, cleanse, and care for your skin with the Ultimate Protection Bundle — the perfect daily duo to keep your skin fresh, clean, and shielded from harmful UV rays. Whether you’re stepping out in the sun or winding down after a long day, this bundle has you covered.
+        <br><strong>RapiWhite Face Wash </strong>gently cleanses your skin, removing dirt, oil, and impurities while leaving it feeling soft, smooth, and refreshed.
+        <br><strong>SunSafe Sunblock </strong>offers broad-spectrum protection against harmful UVA and UVB rays, preventing sunburn, tanning, and premature skin aging while keeping your skin moisturized and non-greasy.
       </p>
   </div>
   <div class="mt-6">
-      <h3 class="text-lg font-semibold mb-2">Directions for Use</h3>
+      <h3 class="text-lg font-semibold mb-2">📦 What’s Inside the Box:</h3>
       <p class="text-gray-600 leading-relaxed">
-        Wet the affected area and lather the bar onto your skin. Leave on for a minute before rinsing. Use twice daily for best results. Avoid contact with eyes and open wounds.
+        1 x RapiWhite Face Wash (100ml)
+      </p>
+      <p class="text-gray-600 leading-relaxed">
+        1 x SunSafe Sunblock (SPF 100)
       </p>
     </div>
 
@@ -115,7 +128,7 @@
     {% for rec in recommendations %}
     <div class="arrival-card relative">
       <div class="image-wrap relative">
-        <a href="/product/{{ rec.id }}">
+        <a href="/product/{{ rec.slug }}">
           <img src="{{ url_for('static', filename=rec.image) }}" alt="{{ rec.name }}">
         </a>
 
@@ -148,7 +161,7 @@
 
 
       </div>
-      <h3><a href="/product/{{ rec.id }}">{{ rec.name }}</a></h3>
+      <h3><a href="/product/{{ rec.slug }}">{{ rec.name }}</a></h3>
       <div class="rating">★★★★★ <span>({{ rec.rating }})</span> <small>{{ rec.reviews }} Reviews</small></div>
       <p>
         <span class="text-gray-500 line-through mr-2">Rs. {{ rec.before_price }}</span>
