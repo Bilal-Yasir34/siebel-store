@@ -1,8 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="flex flex-col items-center justify-center py-20">
-  <h1 class="text-3xl font-bold text-green-600 mb-6">Thank you!</h1>
-  <p class="text-lg mb-4">Your order has been successfully placed.</p>
-  <a href="/" class="bg-pink-200 text-black px-6 py-3 rounded-full font-semibold hover:bg-black hover:text-white transition">Continue Shopping</a>
+<div class="min-h-[70vh] flex items-center justify-center px-4">
+    <div class="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 text-center border border-gray-100">
+        
+        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Order Confirmed!</h1>
+        <p class="text-gray-500 mb-8">Thank you for shopping with Siebel Skincare. Your order has been successfully placed and is being processed.</p>
+
+        <div class="bg-gray-50 rounded-2xl p-4 mb-8 border border-dashed border-gray-300">
+            <p class="text-xs text-gray-400 uppercase tracking-widest font-bold mb-1">Order Reference</p>
+            <p class="text-lg font-mono font-bold text-pink-600">#{{ order_id[:8] if order_id else 'N/A' }}</p>
+        </div>
+
+        <div class="space-y-3">
+            <a href="/" class="block w-full bg-pink-500 text-white py-4 rounded-xl font-bold hover:bg-pink-600 transition-all transform active:scale-95 shadow-lg shadow-pink-200">
+                Continue Shopping
+            </a>
+            
+            <p class="text-sm text-gray-400">
+                A confirmation email has been sent to your inbox.
+            </p>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-gray-100">
+            <p class="text-xs text-gray-400">Need help? Contact us at <span class="text-pink-500 font-medium">siebelskincare@gmail.com</span></p>
+        </div>
+    </div>
 </div>
 {% endblock %}

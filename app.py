@@ -6,6 +6,7 @@ import random
 import os
 import json
 import uuid
+import threading
 from functools import wraps
 from datetime import datetime, timedelta
 
@@ -59,31 +60,30 @@ products = [
     {"id": 17, "name": "Face Care Bundle","slug": "face-care-bundle", "price": 3050, "rating": 4.6, "reviews": 18, "image": "images/facecare_ctg.jpg", "before_price": 3157}
 ]
 
+# --- ASYNC EMAIL HELPER ---
+def send_async_email(app, msg):
+    with app.app_context():
+        try:
+            mail.send(msg)
+        except Exception as e:
+            print(f"Background Email Error: {e}")
+
 # --- DATABASE HELPERS ---
-
 def load_orders():
-    res = supabase.table('orders').select("*").order('date', desc=True).execute()
-    return res.data
-
-def save_orders(order_data):
-    data = order_data if isinstance(order_data, list) else [order_data]
-    supabase.table('orders').upsert(data).execute()
-
-def load_customers():
-    res = supabase.table('customers').select("*").execute()
-    return res.data
-
-def save_customers(customer_data):
-    data = customer_data if isinstance(customer_data, list) else [customer_data]
-    supabase.table('customers').upsert(data).execute()
-
-def load_reviews(product_id):
-    res = supabase.table('reviews').select("*").eq("product_id", product_id).execute()
+    res = supabase.table('orders').select("*").execute()
     return res.data
 
 def load_revenue():
     res = supabase.table('orders').select("total").eq("status", "Completed").execute()
     return sum(float(item['total']) for item in res.data)
+
+def load_customers():
+    res = supabase.table('customers').select("*").execute()
+    return res.data
+
+def load_reviews(product_id):
+    res = supabase.table('reviews').select("*").eq("product_id", product_id).execute()
+    return res.data
 
 # --- ROUTES ---
 
@@ -97,10 +97,7 @@ def sitemap():
 
 @app.route('/robots.txt')
 def robots_txt():
-    try:
-        return Response(open('static/robots.txt').read(), mimetype='text/plain')
-    except:
-        return "User-agent: *\nDisallow:", 200
+    return Response(open('static/robots.txt').read(), mimetype='text/plain')
 
 @app.route('/')
 def home():
@@ -115,6 +112,10 @@ def product_page(slug):
     return render_template(f'product_{product["id"]}.html', product=product, recommendations=recommendations, product_reviews=reviews)
 
 # --- CART ---
+def calculate_cart_total(cart):
+    subtotal = sum(item['price'] * item['quantity'] for item in cart)
+    shipping = 150 if 0 < subtotal < 750 else 0
+    return subtotal, shipping, subtotal + shipping
 
 @app.route('/add-to-cart', methods=['POST'])
 def add_to_cart():
@@ -130,11 +131,6 @@ def add_to_cart():
     subtotal, shipping, total = calculate_cart_total(session.get('cart', []))
     cart_html = render_template('cart_panel_content.html', cart_items=session.get('cart', []), subtotal=subtotal, shipping=shipping, total=total)
     return jsonify({'success': True, 'cart_html': cart_html, 'total_quantity': sum(item['quantity'] for item in session.get('cart', [])), 'subtotal': subtotal, 'shipping': shipping, 'total': total})
-
-def calculate_cart_total(cart):
-    subtotal = sum(item['price'] * item['quantity'] for item in cart)
-    shipping = 150 if 0 < subtotal < 750 else 0
-    return subtotal, shipping, subtotal + shipping
 
 @app.route('/update-cart/<int:product_id>/<string:action>', methods=['POST'])
 def update_cart(product_id, action):
@@ -159,7 +155,6 @@ def get_cart_data():
     return jsonify({'cart_html': cart_html, 'total_quantity': sum(item['quantity'] for item in cart_items), 'subtotal': subtotal, 'shipping': shipping, 'total': total})
 
 # --- REVIEWS ---
-
 @app.route('/submit-review/<int:product_id>', methods=['POST'])
 def submit_review(product_id):
     new_review = {
@@ -171,6 +166,9 @@ def submit_review(product_id):
         'date': datetime.now().strftime('%m/%d/%Y')
     }
     supabase.table('reviews').insert(new_review).execute()
+    my_reviews = session.get('my_reviews', [])
+    my_reviews.append(new_review['id'])
+    session['my_reviews'] = my_reviews
     return jsonify({'success': True})
 
 @app.route('/get-reviews/<int:product_id>')
@@ -179,8 +177,15 @@ def get_reviews(product_id):
     product = next((p for p in products if p["id"] == product_id), None)
     return render_template('reviews_content.html', product_reviews=reviews, product=product)
 
-# --- CHECKOUT & ACCOUNT ---
+@app.route('/delete-review/<int:product_id>/<review_id>', methods=['POST'])
+def delete_review(product_id, review_id):
+    supabase.table('reviews').delete().eq('id', review_id).execute()
+    if 'my_reviews' in session and review_id in session['my_reviews']:
+        session['my_reviews'].remove(review_id)
+        session.modified = True
+    return jsonify({'success': True})
 
+# --- CHECKOUT & ACCOUNT ---
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
     if request.method == 'POST':
@@ -204,28 +209,28 @@ def checkout():
             'status': 'Pending',
             'date': datetime.now().strftime('%Y-%m-%d %H:%M')
         }
-        save_orders(order_data)
+        supabase.table('orders').insert(order_data).execute()
         
-        try:
-            order_details = ''.join([f"{item['name']} x{item['quantity']} — Rs.{item['price'] * item['quantity']}\n" for item in cart_items])
-            send_order_confirmation_email(order_data['email'], order_details)
-        except Exception as e:
-            print(f"Checkout Email Error: {e}")
+        order_details = ''.join([f"{item['name']} x{item['quantity']} — Rs.{item['price'] * item['quantity']}\n" for item in cart_items])
+        msg = Message('Thank You for Your Order — Siebel Skincare', recipients=[order_data['email']])
+        msg.html = f"<html><body><h2>Siebel Skincare</h2><h3>Hello!</h3><p>Your order details:</p><pre>{order_details}</pre></body></html>"
+        threading.Thread(target=send_async_email, args=(app, msg)).start()
 
         session.pop('cart', None)
         return render_template('order_success.html')
 
     cart_items = session.get('cart', [])
     subtotal, shipping, total = calculate_cart_total(cart_items)
-    return render_template('checkout.html', cart_items=cart_items, subtotal=subtotal, shipping=shipping, total=total)
+    user_data = next((c for c in load_customers() if c['email'] == session.get('user')), None)
+    return render_template('checkout.html', cart_items=cart_items, subtotal=subtotal, shipping=shipping, total=total, user_data=user_data)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         email, password = request.form['email'], request.form['password']
         if any(c['email'] == email for c in load_customers()): return "Email already registered."
-        new_customer = {'email': email, 'password': generate_password_hash(password)}
-        save_customers(new_customer)
+        new_customer = {'email': email, 'password': generate_password_hash(password), 'contact_info': {}, 'shipping_info': {}}
+        supabase.table('customers').insert(new_customer).execute()
         session['user'] = email
         return redirect(url_for('checkout'))
     return render_template('register.html')
@@ -244,10 +249,10 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('user', None)
+    session.pop('is_admin', None)
     return redirect('/')
 
 # --- CATEGORIES & SEARCH ---
-
 @app.route('/search')
 def search():
     query = request.args.get('q', '').lower()
@@ -256,20 +261,63 @@ def search():
 
 @app.route('/new-arrivals')
 def new_arrivals():
-    items = [p for p in products if p['id'] in [1, 3, 5, 7, 9]]
+    ids = [1, 3, 5, 7, 9]
+    items = [p for p in products if p['id'] in ids]
     return render_template('new_arrivals.html', products=items)
 
 @app.route('/shop-all')
 def shop_all():
-    return render_template('shop_all.html', products=products)
+    return render_template('shop_all.html', products=products, product_types=["Face Wash", "Serum", "Sunblock", "Body Lotion", "Soap", "Cream"])
 
 @app.route('/bundle-deals')
 def bundle_deals():
     items = [p for p in products if p['id'] in [14, 15, 16, 17]]
     return render_template('bundle_deals.html', products=items)
 
-# --- ADMIN PANEL ---
+@app.route('/category/face-care')
+def face_care_category():
+    items = [p for p in products if p['id'] in [1, 2, 3, 5, 8, 9]]
+    return render_template('facecare_category.html', products=items)
 
+@app.route('/category/body-care')
+def body_care_category():
+    items = [p for p in products if p['id'] in [6, 7, 10, 11, 12, 13]]
+    return render_template('bodycare_category.html', products=items)
+
+@app.route('/category/sun-protection')
+def sun_protection_category():
+    items = [p for p in products if p['id'] in [3, 8, 16]]
+    return render_template('sun_protection_category.html', products=items)
+
+@app.route('/category/anti-itching')
+def anti_itching_category():
+    items = [p for p in products if p['id'] in [13, 11, 12]]
+    return render_template('anti_itching_category.html', products=items)
+
+@app.route('/category/hot-sellers')
+def hot_sellers():
+    items = [p for p in products if p['id'] in [1, 2, 3, 5, 8, 9, 17]]
+    return render_template('hot_sellers.html', products=items)
+
+@app.route('/vitamin-c-products')
+def vitamin_c_products():
+    items = [p for p in products if p['id'] in [1, 4, 7, 9, 10, 14]]
+    return render_template('vitamin_c_products.html', products=items)
+
+@app.route('/privacy-policy')
+def privacy_policy(): return render_template('privacy_policy.html')
+@app.route('/refund-policy')
+def refund_policy(): return render_template('refund_policy.html')
+@app.route('/shipping-policy')
+def shipping_policy(): return render_template('shipping_policy.html')
+@app.route('/terms-of-service')
+def terms_of_service(): return render_template('terms_of_service.html')
+@app.route('/faq')
+def faq(): return render_template('faq.html')
+@app.route('/customer-reviews')
+def customer_reviews(): return render_template('customer_reviews.html')
+
+# --- ADMIN PANEL ---
 app.config['ADMIN_USERNAME'] = 'bilalyasir34@gmail.com'
 app.config['ADMIN_PASSWORD'] = 'LifeIscool4me'
 
@@ -297,25 +345,25 @@ def admin_login():
 @app.route('/admin-dashboard')
 @admin_login_required
 def admin_dashboard():
-    orders = load_orders()
+    orders = load_orders(); now = datetime.now()
     stats = {
         'total_orders': len(orders),
-        'pending_orders': sum(1 for o in orders if o['status'] == 'Pending'),
-        'completed_orders': sum(1 for o in orders if o['status'] == 'Completed'),
-        'cancelled_orders': sum(1 for o in orders if o['status'] == 'Cancelled'),
+        'pending_orders': sum(1 for o in orders if o.get('status') == 'Pending'),
+        'completed_orders': sum(1 for o in orders if o.get('status') == 'Completed'),
+        'cancelled_orders': sum(1 for o in orders if o.get('status') == 'Cancelled'),
         'total_revenue': load_revenue()
     }
-    return render_template('admin_dashboard.html', orders=orders, stats=stats)
+    return render_template('admin_dashboard.html', orders=orders[::-1], stats=stats)
 
-# --- NEW: VIEW INDIVIDUAL ORDER ---
+# ROUTE FOR "OPEN" BUTTON
 @app.route('/admin/order/<order_id>')
 @admin_login_required
 def admin_order_detail(order_id):
-    res = supabase.table('orders').select("*").eq('id', order_id).execute()
+    res = supabase.table('orders').select("*").eq("id", order_id).single().execute()
     if not res.data: return "Order not found", 404
-    return render_template('admin_order_detail.html', order=res.data[0])
+    return render_template('admin_order_detail.html', order=res.data)
 
-# --- NEW: FORM-BASED STATUS UPDATE ---
+# ROUTE FOR "CANCEL" BUTTON (AND STATUS UPDATES)
 @app.route('/update-order-status/<order_id>', methods=['POST'])
 @admin_login_required
 def update_order_status(order_id):
@@ -323,40 +371,14 @@ def update_order_status(order_id):
     supabase.table('orders').update({'status': new_status}).eq('id', order_id).execute()
     
     if new_status in ['Completed', 'Cancelled']:
-        try:
-            res = supabase.table('orders').select('email').eq('id', order_id).execute()
-            if res.data: send_status_update_email(res.data[0]['email'], new_status, order_id)
-        except Exception as e: print(f"Email failed: {e}")
+        res = supabase.table('orders').select('email').eq('id', order_id).execute()
+        if res.data:
+            customer_email = res.data[0]['email']
+            msg = Message(f'Siebel Skincare — Order {new_status}', recipients=[customer_email])
+            msg.html = f"<html><body><h2>Order {new_status}</h2><p>Your order <strong>{order_id}</strong> is {new_status}.</p></body></html>"
+            threading.Thread(target=send_async_email, args=(app, msg)).start()
             
     return redirect(url_for('admin_dashboard'))
-
-# --- AJAX STATUS UPDATE ---
-@app.route('/admin/order/<order_id>/update-status', methods=['POST'])
-@admin_login_required
-def update_order_status_api(order_id):
-    data = request.get_json()
-    new_status = data.get('status')
-    supabase.table('orders').update({'status': new_status}).eq('id', order_id).execute()
-    
-    if new_status in ['Completed', 'Cancelled']:
-        try:
-            res = supabase.table('orders').select('email').eq('id', order_id).execute()
-            if res.data: send_status_update_email(res.data[0]['email'], new_status, order_id)
-        except Exception as e: print(f"Email failed: {e}")
-            
-    return jsonify({'success': True})
-
-# --- EMAILS ---
-
-def send_order_confirmation_email(customer_email, order_details):
-    msg = Message('Thank You for Your Order — Siebel Skincare', recipients=[customer_email])
-    msg.html = f"<h2>Siebel Skincare</h2><p>Your order details:</p><pre>{order_details}</pre>"
-    mail.send(msg)
-
-def send_status_update_email(customer_email, status, order_id):
-    msg = Message(f'Siebel Skincare — Order {status}', recipients=[customer_email])
-    msg.html = f"<h2>Order {status}</h2><p>Your order <strong>{order_id}</strong> is now {status}.</p>"
-    mail.send(msg)
 
 @app.context_processor
 def inject_cart_data():

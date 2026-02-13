@@ -2,128 +2,107 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Order #{{ order.id }} | Admin</title>
+  <title>Order #{{ order.id[:8] }} | Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="/static/favicon.ico">
   <style>body{background:#0F172A}</style>
 </head>
-<body class="text-white min-h-screen p-4 space-y-4">
+<body class="text-white min-h-screen p-4 pb-20">
 
-  <!-- Header -->
-  <header class="flex flex-wrap justify-between items-center gap-3 mb-2">
-    <h1 class="text-xl font-bold">🧾 Order #{{ order.id }}</h1>
-    <div class="flex gap-3 text-sm">
-      <a href="/admin-dashboard" class="text-pink-400 hover:underline">Dashboard</a>
-      <a href="/admin/orders" class="text-pink-400 hover:underline">Orders</a>
-      <a href="/admin-logout" class="text-red-400 hover:underline">Logout</a>
+  <header class="flex flex-wrap justify-between items-center gap-3 mb-6">
+    <h1 class="text-xl font-bold flex items-center gap-2">
+      <span class="text-pink-500">🧾</span> Order Details
+    </h1>
+    <div class="flex gap-4 text-sm font-medium">
+      <a href="/admin-dashboard" class="text-pink-400 hover:text-pink-300">← Back to Dashboard</a>
+      <a href="/logout" class="text-red-400 hover:text-red-300">Logout</a>
     </div>
   </header>
 
-  <!-- Customer Details -->
-  <div class="bg-white/10 p-4 rounded">
-    <h2 class="text-base font-semibold mb-2">👤 Customer</h2>
-    <p class="text-sm">Name: {{ order.name }}</p>
-    <p class="text-sm">Email: {{ order.email }}</p>
-    <p class="text-sm">Phone: {{ order.phone }}</p>
-    <p class="text-sm">Address: {{ order.address }}, {{ order.city }}, {{ order.country }}</p>
-  </div>
-
-  <!-- Order Items -->
-  <div class="bg-white/10 p-4 rounded">
-    <h2 class="text-base font-semibold mb-3">📦 Items</h2>
-
-    <!-- Desktop Table -->
-    <div class="hidden md:block">
-      <table class="w-full text-left text-sm">
-        <thead>
-          <tr class="border-b bg-white/5">
-            <th class="py-2 px-2">Product</th>
-            <th class="py-2 px-2">Quantity</th>
-            <th class="py-2 px-2">Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in order.cart_items %}
-          <tr class="border-b border-white/10">
-            <td class="py-2 px-2">{{ item.name }}</td>
-            <td class="py-2 px-2">{{ item.quantity }}</td>
-            <td class="py-2 px-2">Rs. {{ item.price }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Mobile Cards -->
-    <div class="md:hidden space-y-2">
-      {% for item in order.cart_items %}
-      <div class="bg-white/10 p-3 rounded">
-        <p class="text-sm font-semibold">{{ item.name }}</p>
-        <p class="text-xs">Qty: {{ item.quantity }}</p>
-        <p class="text-xs">Rs. {{ item.price }}</p>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    
+    <div class="lg:col-span-2 space-y-6">
+      <div class="bg-white/5 border border-white/10 p-5 rounded-xl">
+        <h2 class="text-pink-500 font-bold mb-4 flex items-center gap-2">👤 Customer Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div><p class="text-gray-400">Name</p><p class="font-medium">{{ order.name }}</p></div>
+          <div><p class="text-gray-400">Email</p><p class="font-medium">{{ order.email }}</p></div>
+          <div><p class="text-gray-400">Phone</p><p class="font-medium">{{ order.phone }}</p></div>
+          <div><p class="text-gray-400">Address</p><p class="font-medium">{{ order.address }}, {{ order.city }}, {{ order.country }}</p></div>
+        </div>
       </div>
-      {% endfor %}
+
+      <div class="bg-white/5 border border-white/10 p-5 rounded-xl">
+        <h2 class="text-pink-500 font-bold mb-4 flex items-center gap-2">📦 Items Ordered</h2>
+        <div class="overflow-hidden rounded-lg">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-white/5 text-gray-400 uppercase text-xs">
+              <tr>
+                <th class="py-3 px-4">Product</th>
+                <th class="py-3 px-4">Qty</th>
+                <th class="py-3 px-4 text-right">Price</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5">
+              {% for item in order.cart_items %}
+              <tr>
+                <td class="py-3 px-4 font-medium">{{ item.name }}</td>
+                <td class="py-3 px-4 text-gray-400">{{ item.quantity }}</td>
+                <td class="py-3 px-4 text-right">Rs. {{ item.price }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
+          <span class="text-gray-400">Order Total</span>
+          <span class="text-xl font-bold text-pink-500">Rs. {{ order.total }}</span>
+        </div>
+      </div>
     </div>
 
-    <p class="text-lg font-bold mt-3">Total: Rs. {{ order.total }}</p>
+    <div class="space-y-6">
+      <div class="bg-white/5 border border-white/10 p-5 rounded-xl sticky top-4">
+        <h2 class="text-pink-500 font-bold mb-4">🚦 Update Status</h2>
+        
+        <form id="status-form" method="POST" action="/update-order-status/{{ order.id }}">
+          <div class="space-y-4">
+            <div>
+              <label class="text-xs text-gray-400 block mb-2">Current Status: <span class="text-white font-bold">{{ order.status }}</span></label>
+              <select name="status" id="status-select" class="w-full border border-white/20 bg-black/40 text-white px-3 py-3 rounded-lg text-sm outline-none focus:ring-2 focus:ring-pink-500">
+                <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                <option value="In Progress" {% if order.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
+                <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+              </select>
+            </div>
+
+            <button type="submit" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 rounded-lg transition-all active:scale-95 shadow-lg shadow-pink-900/20">
+              Apply New Status
+            </button>
+            
+            <button type="button" onclick="cancelOrder()" class="w-full bg-red-600/20 hover:bg-red-600/40 text-red-400 font-medium py-3 rounded-lg border border-red-500/30 transition-all">
+              Cancel Order
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
-  <!-- Status Controls -->
-  <div class="bg-white/10 p-4 rounded space-y-3">
-    <h2 class="text-base font-semibold">🚦 Status</h2>
-
-    <form id="status-form" class="flex flex-wrap gap-2">
-      <select id="status-select" class="border border-white/20 bg-white/5 text-gray-500 px-3 py-2 rounded text-sm">
-        <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
-        <option value="In Progress" {% if order.status == 'In Progress' %}selected{% endif %}>In Progress</option>
-        <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
-        <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
-      </select>
-
-      <button type="button" onclick="updateStatus()" class="bg-pink-500 px-3 py-2 rounded text-sm hover:bg-pink-600">Update</button>
-      <button type="button" onclick="cancelOrder()" class="bg-red-600 px-3 py-2 rounded text-sm hover:bg-red-700">Cancel</button>
-    </form>
-
-    <p id="status-message" class="text-green-500 font-medium hidden"></p>
-  </div>
-
-  <!-- Mobile Sticky Navbar -->
-  <div class="fixed bottom-0 left-0 right-0 bg-white/5 border-t border-white/20 flex justify-around p-2 md:hidden">
-    <a href="/admin-dashboard" class="flex flex-col items-center text-xs">📊<span>Dashboard</span></a>
-    <a href="/admin/orders" class="flex flex-col items-center text-xs">📑<span>Orders</span></a>
-    <a href="/" class="flex flex-col items-center text-xs text-green-500">🏬<span>Store</span></a>
+  <div class="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg border-t border-white/10 flex justify-around p-3 md:hidden">
+    <a href="/admin-dashboard" class="flex flex-col items-center text-[10px] text-gray-400">📊<span>Dashboard</span></a>
+    <a href="/" class="flex flex-col items-center text-[10px] text-gray-400">🏬<span>Store</span></a>
   </div>
 
 <script>
-function updateStatus() {
-  const newStatus = document.getElementById('status-select').value;
-  fetch('/admin/order/{{ order.id }}/update-status', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ status: newStatus })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      const msg = document.getElementById('status-message');
-      msg.classList.remove('hidden');
-      msg.textContent = "Order updated to " + newStatus + "!";
-    }
-  });
-}
-
 function cancelOrder() {
-  if (!confirm('Cancel this order?')) return;
-  fetch('/admin/order/{{ order.id }}/cancel', { method: 'POST' })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      document.getElementById('status-message').classList.remove('hidden');
-      document.getElementById('status-message').textContent = "Order cancelled.";
-      document.getElementById('status-select').value = "Cancelled";
-    }
-  });
+  if (confirm('Are you sure you want to CANCEL this order? This will notify the customer.')) {
+    const select = document.getElementById('status-select');
+    select.value = 'Cancelled';
+    document.getElementById('status-form').submit();
+  }
 }
 </script>
 

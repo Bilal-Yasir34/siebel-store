@@ -8,46 +8,56 @@
   <link rel="icon" href="/static/favicon.ico">
   <style>
     body {
-      background: linear-gradient(135deg, #101828, #1E293B);
+      background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
     }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
+<body class="flex items-center justify-center min-h-screen p-4">
 
-  <div class="bg-white/5 backdrop-blur-lg shadow-2xl rounded-2xl p-8 w-full max-w-md text-white border border-white/10">
+  <div class="bg-white/5 backdrop-blur-xl shadow-2xl rounded-2xl p-8 w-full max-w-md text-white border border-white/10">
     <div class="text-center mb-8">
-      <img src="/static/images/imagebilal.jpeg" alt="Siebel Admin" class="w-16 mx-auto mb-3">
-      <h1 class="text-3xl font-bold">Siebel Admin Panel</h1>
-      <p class="text-sm text-gray-300">Secure Access for Administrators</p>
+      <div class="w-20 h-20 mx-auto mb-4 bg-pink-500/20 rounded-full flex items-center justify-center border border-pink-500/30">
+         <img src="/static/images/imagebilal.jpeg" alt="Admin" class="w-16 h-16 rounded-full object-cover" onerror="this.style.display='none'">
+         <span class="text-2xl">🛡️</span>
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight">Siebel Admin</h1>
+      <p class="text-sm text-gray-400 mt-2">Authorized Personnel Only</p>
     </div>
 
-    <form method="POST" action="/admin-login" class="space-y-6">
+    <form method="POST" action="/admin-login" class="space-y-5">
 
       <div>
-        <label class="block text-gray-300 text-sm font-medium mb-1">Username</label>
-        <input type="text" name="username" required
-               class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400 outline-none">
+        <label class="block text-gray-400 text-xs uppercase tracking-wider font-semibold mb-2">Admin Email</label>
+        <input type="text" name="username" placeholder="bilalyasir34@gmail.com" required
+               class="w-full px-4 py-3 rounded-xl bg-black/20 border border-white/10 text-white placeholder-gray-600 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all">
       </div>
 
       <div>
-        <label class="block text-gray-300 text-sm font-medium mb-1">Password</label>
-        <input type="password" name="password" required
-               class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:ring-2 focus:ring-pink-400 outline-none">
+        <label class="block text-gray-400 text-xs uppercase tracking-wider font-semibold mb-2">Password</label>
+        <input type="password" name="password" placeholder="••••••••" required
+               class="w-full px-4 py-3 rounded-xl bg-black/20 border border-white/10 text-white placeholder-gray-600 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all">
       </div>
 
       <button type="submit"
-              class="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 rounded-lg transition duration-200">
-        🔒 Sign In
+              class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 rounded-xl transition duration-300 shadow-lg shadow-pink-900/20 flex items-center justify-center gap-2">
+        <span>Sign In to Dashboard</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
       </button>
     </form>
 
-    <div class="flex justify-between items-center text-sm text-gray-400 mt-5">
-      <a href="/" class="hover:underline">← Back to Store</a>
-      <a href="#" class="hover:underline">Forgot Password?</a>
+    <div class="flex justify-center items-center text-sm text-gray-500 mt-8 pt-6 border-t border-white/5">
+      <a href="/" class="hover:text-pink-400 transition-colors flex items-center gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Return to Shop
+      </a>
     </div>
 
-    <div class="mt-6 text-center text-xs text-gray-500">
-      &copy; 2025 Siebel Skincare. All rights reserved.
+    <div class="mt-4 text-center text-[10px] text-gray-600 uppercase tracking-widest">
+      Encrypted Session &bull; Siebel Systems
     </div>
   </div>
 

@@ -10,16 +10,14 @@
 </head>
 <body class="text-white min-h-screen p-3">
 
-  <!-- Header -->
   <header class="flex flex-wrap justify-between items-center mb-6 gap-2">
     <h1 class="text-2xl font-bold">Dashboard</h1>
     <div class="flex gap-3 text-sm">
       <a href="/" class="text-pink-400 hover:underline">← Store</a>
-      <a href="/admin-logout" class="text-red-400 hover:underline">Logout</a>
+      <a href="/logout" class="text-red-400 hover:underline">Logout</a>
     </div>
   </header>
 
-  <!-- Stats Cards -->
   <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-5">
     <div class="bg-white/10 p-3 rounded text-center">
       <h2 class="text-xs font-semibold">Orders</h2>
@@ -43,34 +41,44 @@
     </div>
   </div>
 
-  <!-- Orders Desktop Table -->
   <div class="hidden md:block overflow-x-auto rounded border border-white/10 mb-6">
     <table class="w-full border-collapse">
       <thead>
         <tr class="text-gray-300 bg-white/5 border-b border-white/10 text-sm">
-          <th class="p-3">Order ID</th>
-          <th class="p-3">Customer</th>
-          <th class="p-3">Total</th>
-          <th class="p-3">Status</th>
-          <th class="p-3">Date</th>
-          <th class="p-3">Actions</th>
+          <th class="p-3 text-left">Order ID</th>
+          <th class="p-3 text-left">Customer</th>
+          <th class="p-3 text-left">Total</th>
+          <th class="p-3 text-left">Status</th>
+          <th class="p-3 text-left">Date</th>
+          <th class="p-3 text-left">Actions</th>
         </tr>
       </thead>
       <tbody>
         {% for order in orders %}
         <tr class="border-b border-white/10 hover:bg-white/5 text-sm">
-          <td class="p-3">
-            <a href="/admin/order/{{ order.id }}" class="text-pink-400 hover:underline">{{ order.id }}</a>
+          <td class="p-3 font-mono text-xs">
+            <a href="/admin/order/{{ order.id }}" class="text-pink-400 hover:underline">{{ order.id[:8] }}...</a>
           </td>
           <td class="p-3">{{ order.name }}</td>
           <td class="p-3">Rs. {{ order.total }}</td>
-          <td class="p-3">{{ order.status }}</td>
-          <td class="p-3">{{ order.date }}</td>
           <td class="p-3">
-            <form method="POST" action="/admin/order/{{ order.id }}/cancel">
-              <button class="bg-red-600 text-xs px-3 py-1 rounded hover:bg-red-700"
-                onclick="return confirm('Cancel this order?')">Cancel</button>
-            </form>
+            <span class="px-2 py-1 rounded text-xs 
+              {% if order.status == 'Pending' %} bg-yellow-500/20 text-yellow-400
+              {% elif order.status == 'Completed' %} bg-green-500/20 text-green-400
+              {% else %} bg-red-500/20 text-red-400 {% endif %}">
+              {{ order.status }}
+            </span>
+          </td>
+          <td class="p-3 text-gray-400">{{ order.date }}</td>
+          <td class="p-3">
+            <div class="flex gap-2">
+                <a href="/admin/order/{{ order.id }}" class="bg-blue-600 text-xs px-3 py-1 rounded hover:bg-blue-700">Open</a>
+                <form method="POST" action="/update-order-status/{{ order.id }}">
+                    <input type="hidden" name="status" value="Cancelled">
+                    <button class="bg-red-600/50 text-xs px-3 py-1 rounded hover:bg-red-600" 
+                            onclick="return confirm('Cancel this order?')">Cancel</button>
+                </form>
+            </div>
           </td>
         </tr>
         {% endfor %}
@@ -78,22 +86,22 @@
     </table>
   </div>
 
-  <!-- Orders Mobile Cards -->
   <div class="space-y-3 md:hidden">
     {% for order in orders %}
     <div class="bg-white/10 p-3 rounded">
       <div class="flex justify-between items-center mb-1">
-        <h3 class="text-sm font-bold">#{{ order.id }}</h3>
-        <span class="text-xs bg-gray-300/20 px-2 py-0.5 rounded">{{ order.status }}</span>
+        <h3 class="text-sm font-bold font-mono">{{ order.id[:8] }}...</h3>
+        <span class="text-xs bg-white/5 px-2 py-0.5 rounded">{{ order.status }}</span>
       </div>
       <p class="text-xs">👤 {{ order.name }}</p>
       <p class="text-xs">💵 Rs. {{ order.total }}</p>
-      <p class="text-xs">📅 {{ order.date }}</p>
-      <div class="flex gap-2 mt-2">
-        <a href="/admin/order/{{ order.id }}" class="bg-pink-500 text-xs px-3 py-1 rounded hover:bg-pink-600">Details</a>
-        <form method="POST" action="/admin/order/{{ order.id }}/cancel">
-          <button class="bg-red-600 text-xs px-3 py-1 rounded hover:bg-red-700"
-            onclick="return confirm('Cancel this order?')">Cancel</button>
+      <p class="text-xs text-gray-400">📅 {{ order.date }}</p>
+      <div class="flex gap-2 mt-3">
+        <a href="/admin/order/{{ order.id }}" class="flex-1 text-center bg-pink-500 text-xs px-3 py-2 rounded font-bold">Details</a>
+        <form method="POST" action="/update-order-status/{{ order.id }}" class="flex-1">
+            <input type="hidden" name="status" value="Cancelled">
+            <button class="w-full bg-red-600/50 text-xs px-3 py-2 rounded hover:bg-red-600"
+              onclick="return confirm('Cancel this order?')">Cancel</button>
         </form>
       </div>
     </div>
