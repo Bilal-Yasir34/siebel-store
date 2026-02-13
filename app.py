@@ -15,12 +15,15 @@ KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxi
 supabase: Client = create_client(URL, KEY)
 
 def is_within_days(date_str, days):
-    order_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M')
-    return datetime.now() - order_date <= timedelta(days=days)
+    try:
+        order_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M')
+        return datetime.now() - order_date <= timedelta(days=days)
+    except:
+        return False
 
 app = Flask(__name__)
 
-# Email Configuration (Updated to SSL Port 465)
+# Email Configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
@@ -28,7 +31,7 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USERNAME'] = 'siebelskincare@gmail.com'
 app.config['MAIL_PASSWORD'] = 'ttad fomg atha eoqh'
 app.config['MAIL_DEFAULT_SENDER'] = 'siebelskincare@gmail.com'
-app.config['MAIL_TIMEOUT'] = 10  # Stop waiting after 10 seconds
+app.config['MAIL_TIMEOUT'] = 10 
 
 mail = Mail(app)
 app.secret_key = 'super_secret_key'
@@ -59,7 +62,7 @@ products = [
 # --- DATABASE HELPERS ---
 
 def load_orders():
-    res = supabase.table('orders').select("*").execute()
+    res = supabase.table('orders').select("*").order('date', desc=True).execute()
     return res.data
 
 def save_orders(order_data):
@@ -88,14 +91,16 @@ def load_revenue():
 def sitemap():
     urls = ["https://www.siebel.store/", "https://www.siebel.store/new-arrivals", "https://www.siebel.store/shop-all", "https://www.siebel.store/bundle-deals", "https://www.siebel.store/customer-reviews"]
     for product in products:
-        slug = product['name'].lower().replace(" ", "-")
-        urls.append(f"https://www.siebel.store/product/{product['id']}/{slug}")
+        urls.append(f"https://www.siebel.store/product/{product['slug']}")
     xml = render_template('sitemap_template.xml', urls=urls)
     return Response(xml, mimetype='application/xml')
 
 @app.route('/robots.txt')
 def robots_txt():
-    return Response(open('static/robots.txt').read(), mimetype='text/plain')
+    try:
+        return Response(open('static/robots.txt').read(), mimetype='text/plain')
+    except:
+        return "User-agent: *\nDisallow:", 200
 
 @app.route('/')
 def home():
@@ -166,9 +171,6 @@ def submit_review(product_id):
         'date': datetime.now().strftime('%m/%d/%Y')
     }
     supabase.table('reviews').insert(new_review).execute()
-    my_reviews = session.get('my_reviews', [])
-    my_reviews.append(new_review['id'])
-    session['my_reviews'] = my_reviews
     return jsonify({'success': True})
 
 @app.route('/get-reviews/<int:product_id>')
@@ -176,14 +178,6 @@ def get_reviews(product_id):
     reviews = load_reviews(product_id)
     product = next((p for p in products if p["id"] == product_id), None)
     return render_template('reviews_content.html', product_reviews=reviews, product=product)
-
-@app.route('/delete-review/<int:product_id>/<review_id>', methods=['POST'])
-def delete_review(product_id, review_id):
-    supabase.table('reviews').delete().eq('id', review_id).execute()
-    if 'my_reviews' in session and review_id in session['my_reviews']:
-        session['my_reviews'].remove(review_id)
-        session.modified = True
-    return jsonify({'success': True})
 
 # --- CHECKOUT & ACCOUNT ---
 
@@ -212,27 +206,25 @@ def checkout():
         }
         save_orders(order_data)
         
-        # FAIL-SAFE EMAIL SENDER
         try:
             order_details = ''.join([f"{item['name']} x{item['quantity']} — Rs.{item['price'] * item['quantity']}\n" for item in cart_items])
             send_order_confirmation_email(order_data['email'], order_details)
         except Exception as e:
-            print(f"Checkout Email Failed (likely network timeout): {e}")
+            print(f"Checkout Email Error: {e}")
 
         session.pop('cart', None)
         return render_template('order_success.html')
 
     cart_items = session.get('cart', [])
     subtotal, shipping, total = calculate_cart_total(cart_items)
-    user_data = next((c for c in load_customers() if c['email'] == session.get('user')), None)
-    return render_template('checkout.html', cart_items=cart_items, subtotal=subtotal, shipping=shipping, total=total, user_data=user_data)
+    return render_template('checkout.html', cart_items=cart_items, subtotal=subtotal, shipping=shipping, total=total)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         email, password = request.form['email'], request.form['password']
         if any(c['email'] == email for c in load_customers()): return "Email already registered."
-        new_customer = {'email': email, 'password': generate_password_hash(password), 'contact_info': {}, 'shipping_info': {}}
+        new_customer = {'email': email, 'password': generate_password_hash(password)}
         save_customers(new_customer)
         session['user'] = email
         return redirect(url_for('checkout'))
@@ -264,41 +256,17 @@ def search():
 
 @app.route('/new-arrivals')
 def new_arrivals():
-    ids = [1, 3, 5, 7, 9]
-    items = [p for p in products if p['id'] in ids]
+    items = [p for p in products if p['id'] in [1, 3, 5, 7, 9]]
     return render_template('new_arrivals.html', products=items)
 
 @app.route('/shop-all')
 def shop_all():
-    return render_template('shop_all.html', products=products, product_types=["Face Wash", "Serum", "Sunblock", "Body Lotion", "Soap", "Cream"])
+    return render_template('shop_all.html', products=products)
 
 @app.route('/bundle-deals')
 def bundle_deals():
     items = [p for p in products if p['id'] in [14, 15, 16, 17]]
     return render_template('bundle_deals.html', products=items)
-
-@app.route('/category/face-care')
-def face_care_category():
-    items = [p for p in products if p['id'] in [1, 2, 3, 5, 8, 9]]
-    return render_template('facecare_category.html', products=items)
-
-@app.route('/category/body-care')
-def body_care_category():
-    items = [p for p in products if p['id'] in [6, 7, 10, 11, 12, 13]]
-    return render_template('bodycare_category.html', products=items)
-
-@app.route('/privacy-policy')
-def privacy_policy(): return render_template('privacy_policy.html')
-@app.route('/refund-policy')
-def refund_policy(): return render_template('refund_policy.html')
-@app.route('/shipping-policy')
-def shipping_policy(): return render_template('shipping_policy.html')
-@app.route('/terms-of-service')
-def terms_of_service(): return render_template('terms_of_service.html')
-@app.route('/faq')
-def faq(): return render_template('faq.html')
-@app.route('/customer-reviews')
-def customer_reviews(): return render_template('customer_reviews.html')
 
 # --- ADMIN PANEL ---
 
@@ -312,7 +280,6 @@ def admin_login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# Fixed the /admin route (added redirect and slash handling)
 @app.route('/admin')
 @app.route('/admin/')
 @admin_login_required
@@ -330,36 +297,52 @@ def admin_login():
 @app.route('/admin-dashboard')
 @admin_login_required
 def admin_dashboard():
-    orders = load_orders(); now = datetime.now()
+    orders = load_orders()
     stats = {
         'total_orders': len(orders),
         'pending_orders': sum(1 for o in orders if o['status'] == 'Pending'),
         'completed_orders': sum(1 for o in orders if o['status'] == 'Completed'),
         'cancelled_orders': sum(1 for o in orders if o['status'] == 'Cancelled'),
-        'last_week': sum(1 for o in orders if datetime.strptime(o['date'], "%Y-%m-%d %H:%M") > now - timedelta(days=7)),
         'total_revenue': load_revenue()
     }
-    return render_template('admin_dashboard.html', orders=orders[::-1], stats=stats)
+    return render_template('admin_dashboard.html', orders=orders, stats=stats)
 
+# --- NEW: VIEW INDIVIDUAL ORDER ---
+@app.route('/admin/order/<order_id>')
+@admin_login_required
+def admin_order_detail(order_id):
+    res = supabase.table('orders').select("*").eq('id', order_id).execute()
+    if not res.data: return "Order not found", 404
+    return render_template('admin_order_detail.html', order=res.data[0])
+
+# --- NEW: FORM-BASED STATUS UPDATE ---
+@app.route('/update-order-status/<order_id>', methods=['POST'])
+@admin_login_required
+def update_order_status(order_id):
+    new_status = request.form.get('status')
+    supabase.table('orders').update({'status': new_status}).eq('id', order_id).execute()
+    
+    if new_status in ['Completed', 'Cancelled']:
+        try:
+            res = supabase.table('orders').select('email').eq('id', order_id).execute()
+            if res.data: send_status_update_email(res.data[0]['email'], new_status, order_id)
+        except Exception as e: print(f"Email failed: {e}")
+            
+    return redirect(url_for('admin_dashboard'))
+
+# --- AJAX STATUS UPDATE ---
 @app.route('/admin/order/<order_id>/update-status', methods=['POST'])
 @admin_login_required
 def update_order_status_api(order_id):
-    new_status = request.get_json().get('status')
-    
-    # 1. ALWAYS update the database first
+    data = request.get_json()
+    new_status = data.get('status')
     supabase.table('orders').update({'status': new_status}).eq('id', order_id).execute()
     
-    # 2. FAIL-SAFE STATUS EMAIL (Try/Except prevents page crash)
     if new_status in ['Completed', 'Cancelled']:
         try:
-            # We fetch fresh order info to get the customer email
             res = supabase.table('orders').select('email').eq('id', order_id).execute()
-            if res.data:
-                customer_email = res.data[0]['email']
-                send_status_update_email(customer_email, new_status, order_id)
-        except Exception as e:
-            print(f"Status Update Email Failed for order {order_id}: {e}")
-            # We don't return an error to the user because the DB update worked
+            if res.data: send_status_update_email(res.data[0]['email'], new_status, order_id)
+        except Exception as e: print(f"Email failed: {e}")
             
     return jsonify({'success': True})
 
@@ -367,12 +350,12 @@ def update_order_status_api(order_id):
 
 def send_order_confirmation_email(customer_email, order_details):
     msg = Message('Thank You for Your Order — Siebel Skincare', recipients=[customer_email])
-    msg.html = f"<html><body><h2>Siebel Skincare</h2><h3>Hello!</h3><p>Your order details:</p><pre>{order_details}</pre></body></html>"
+    msg.html = f"<h2>Siebel Skincare</h2><p>Your order details:</p><pre>{order_details}</pre>"
     mail.send(msg)
 
 def send_status_update_email(customer_email, status, order_id):
     msg = Message(f'Siebel Skincare — Order {status}', recipients=[customer_email])
-    msg.html = f"<html><body><h2>Order {status}</h2><p>Your order <strong>{order_id}</strong> is {status}.</p></body></html>"
+    msg.html = f"<h2>Order {status}</h2><p>Your order <strong>{order_id}</strong> is now {status}.</p>"
     mail.send(msg)
 
 @app.context_processor
