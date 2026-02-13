@@ -28,6 +28,7 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USERNAME'] = 'siebelskincare@gmail.com'
 app.config['MAIL_PASSWORD'] = 'ttad fomg atha eoqh'
 app.config['MAIL_DEFAULT_SENDER'] = 'siebelskincare@gmail.com'
+app.config['MAIL_TIMEOUT'] = 10  # Stop waiting after 10 seconds
 
 mail = Mail(app)
 app.secret_key = 'super_secret_key'
@@ -216,7 +217,7 @@ def checkout():
             order_details = ''.join([f"{item['name']} x{item['quantity']} — Rs.{item['price'] * item['quantity']}\n" for item in cart_items])
             send_order_confirmation_email(order_data['email'], order_details)
         except Exception as e:
-            print(f"Checkout Email Failed (likely local network timeout): {e}")
+            print(f"Checkout Email Failed (likely network timeout): {e}")
 
         session.pop('cart', None)
         return render_template('order_success.html')
@@ -307,15 +308,22 @@ app.config['ADMIN_PASSWORD'] = 'LifeIscool4me'
 def admin_login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if 'is_admin' not in session: return redirect('/admin-login')
+        if 'is_admin' not in session: return redirect(url_for('admin_login'))
         return f(*args, **kwargs)
     return decorated_function
+
+# Fixed the /admin route (added redirect and slash handling)
+@app.route('/admin')
+@app.route('/admin/')
+@admin_login_required
+def admin_home(): 
+    return redirect(url_for('admin_dashboard'))
 
 @app.route('/admin-login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
         if request.form.get('username') == app.config['ADMIN_USERNAME'] and request.form.get('password') == app.config['ADMIN_PASSWORD']:
-            session['is_admin'] = True; return redirect('/admin-dashboard')
+            session['is_admin'] = True; return redirect(url_for('admin_dashboard'))
         return "Invalid login."
     return render_template('admin_login.html')
 
@@ -337,15 +345,21 @@ def admin_dashboard():
 @admin_login_required
 def update_order_status_api(order_id):
     new_status = request.get_json().get('status')
+    
+    # 1. ALWAYS update the database first
     supabase.table('orders').update({'status': new_status}).eq('id', order_id).execute()
     
-    # FAIL-SAFE STATUS EMAIL
+    # 2. FAIL-SAFE STATUS EMAIL (Try/Except prevents page crash)
     if new_status in ['Completed', 'Cancelled']:
         try:
-            order = next((o for o in load_orders() if o['id'] == order_id), None)
-            if order: send_status_update_email(order['email'], new_status, order_id)
+            # We fetch fresh order info to get the customer email
+            res = supabase.table('orders').select('email').eq('id', order_id).execute()
+            if res.data:
+                customer_email = res.data[0]['email']
+                send_status_update_email(customer_email, new_status, order_id)
         except Exception as e:
-            print(f"Status Update Email Failed: {e}")
+            print(f"Status Update Email Failed for order {order_id}: {e}")
+            # We don't return an error to the user because the DB update worked
             
     return jsonify({'success': True})
 
