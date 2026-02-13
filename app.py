@@ -89,9 +89,19 @@ def load_reviews(product_id):
 
 @app.route('/sitemap.xml')
 def sitemap():
-    urls = ["https://www.siebel.store/", "https://www.siebel.store/new-arrivals", "https://www.siebel.store/shop-all", "https://www.siebel.store/bundle-deals", "https://www.siebel.store/customer-reviews"]
+    # Update this to your official domain
+    base_url = "https://www.siebel.store" 
+    
+    urls = [
+        f"{base_url}/", 
+        f"{base_url}/new-arrivals", 
+        f"{base_url}/shop-all", 
+        f"{base_url}/bundle-deals", 
+        f"{base_url}/customer-reviews"
+    ]
     for product in products:
-        urls.append(f"https://www.siebel.store/product/{product['slug']}")
+        urls.append(f"{base_url}/product/{product['slug']}")
+        
     xml = render_template('sitemap_template.xml', urls=urls)
     return Response(xml, mimetype='application/xml')
 
