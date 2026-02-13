@@ -3,3 +3,4 @@ flask_sqlalchemy
 flask_mail
 Flask-Mail
 gunicorn
+supabase==2.10.0
